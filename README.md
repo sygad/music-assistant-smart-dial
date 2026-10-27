@@ -32,6 +32,8 @@ I looked at portable Bluetooth speakers and at much larger portable party speake
 
 So it had to be **speakers permanently mounted in the ceiling**.
 
+<br>
+
 ## 2. The ceiling speakers (May to October 2024)
 
 I chose the **Dali Phantom E80**. They're among the largest ceiling speakers rated for humid rooms that don't cost an absolute fortune.
@@ -51,6 +53,8 @@ Above the ceiling, each speaker got its own enclosure, bolted between the joists
 [![Both enclosures bolted between the joists, among the ventilation ducts](images/03-enclosures-on-joists.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/03-enclosures-on-joists.jpg "Open full size")
 
 *Both enclosures bolted to the joists, among the MVHR ducting.*
+
+<br>
 
 ## 3. Finding the bass (July 2024 to June 2025)
 
@@ -82,6 +86,8 @@ Subs and an amp made for humid rooms would have cost far too much. So I looked a
 
 *The two 10-inch Kenwood subs, up close.*
 
+<br>
+
 ## 4. The amps (powering car parts from the mains)
 
 A car amp needs 12 volts, so I connected the Kenwood amp to a **12 V 30 A power supply** to see whether it could drive the subs at full volume. It could.
@@ -97,6 +103,8 @@ A car amp needs 12 volts, so I connected the Kenwood amp to a **12 V 30 A power 
 - **Streamer:** [WiiM Pro](https://www.wiimhome.com/wiimpro/overview)
 
 The subs have now been in the bathroom for over a year, through at least one winter, and they're holding up very well. The car amp and its power supply turned out to be a very cheap way to get a lot of bass.
+
+<br>
 
 ## 5. Version 1: Home Assistant in control (2025)
 
@@ -128,6 +136,8 @@ As a proof of concept it works, and it works well. But playing music takes too m
 
 The phone shouldn't be needed at all.
 
+<br>
+
 ## 6. Looking for a successor (early 2026)
 
 I really liked the look of the **Spotify Car Thing**. A screen and a dial would have made an excellent successor. But it's [discontinued](https://en.wikipedia.org/wiki/Car_Thing), and making it do anything else takes considerable hacking.
@@ -141,6 +151,8 @@ Thankfully, Waveshare makes an ESP32 rotary dial with a round touchscreen: the [
 [![The Waveshare ESP32-S3 knob with its round touchscreen](images/13-waveshare-knob-small.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/13-waveshare-knob.jpg "Open full size")
 
 *The Waveshare ESP32-S3 knob (product photo, shown for reference).*
+
+<br>
 
 ## 7. Designing version 2 (March 2026)
 
@@ -179,6 +191,8 @@ Encouraged, I carried on designing with Claude to explore the full range of flow
 *Every screen and how you get between them. Open it full size to read the notes under each screen.*
 
 ▶ **[See the full flow in Figma](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=577-119)**
+
+<br>
 
 ## 8. What's next
 
