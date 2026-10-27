@@ -98,7 +98,7 @@ The Denon can be controlled over Telnet. I left it entirely to Claude and Home A
 
 A **Tuya smart knob** on the wall does the everyday part. Turning it sets the volume. Pressing it turns the volume down and then switches off the smart plugs, which switch off the amps.
 
-<p><a href="https://raw.githubusercontent.com/sygad/music-assistant-smart-dial-v2/main/images/11-version-1-dashboard.jpg" title="Open full size"><img src="images/11-version-1-dashboard.jpg" width="31.6%" alt="The version 1 Home Assistant dashboard: now playing, then sliders for volume, treble, bass and sub"></a> <a href="https://raw.githubusercontent.com/sygad/music-assistant-smart-dial-v2/main/images/10-tuya-knob.jpg" title="Open full size"><img src="images/10-tuya-knob.jpg" width="67.4%" alt="The Tuya smart knob"></a></p>
+<p><a href="https://raw.githubusercontent.com/sygad/music-assistant-smart-dial-v2/main/images/11-version-1-dashboard.jpg" title="Open full size"><img src="images/11-version-1-dashboard.jpg" width="31.6%" alt="The version 1 Home Assistant dashboard: now playing, then sliders for volume, treble, bass and sub"></a> <a href="https://raw.githubusercontent.com/sygad/music-assistant-smart-dial-v2/main/images/10-tuya-knob.jpg" title="Open full size"><img src="images/10-tuya-knob-small.png" width="67.4%" alt="The Tuya smart knob"></a></p>
 
 *Left: the version 1 dashboard, with what's playing, then volume, treble, bass and sub. Right: the Tuya smart knob (product photo, shown for reference).*
 
