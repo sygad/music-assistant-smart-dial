@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" width="1000" height="470" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Version 1: how the sound gets to the bathroom, and what controls it</title>
+  <style>
+    .bg { fill: #ffffff; }
+    .box { fill: #f4f6f8; stroke: #c9d1d9; stroke-width: 1.5; }
+    .ctl { fill: #fff6ec; stroke: #f0a050; }
+    .name { fill: #1f2328; font-size: 16px; font-weight: 600; }
+    .sub { fill: #59636e; font-size: 12.5px; }
+    .lbl { fill: #59636e; font-size: 12px; }
+    .head { fill: #1f2328; font-size: 13px; font-weight: 700; letter-spacing: .06em; }
+    .sound { stroke: #2f81f7; stroke-width: 2.5; fill: none; }
+    .control { stroke: #e8862a; stroke-width: 2; fill: none; stroke-dasharray: 6 5; }
+    .power { stroke: #8c959f; stroke-width: 2; fill: none; stroke-dasharray: 2 4; }
+    .ah-s { fill: #2f81f7; } .ah-c { fill: #e8862a; } .ah-p { fill: #8c959f; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0d1117; }
+      .box { fill: #161b22; stroke: #3d444d; }
+      .ctl { fill: #2a1f12; stroke: #b5702c; }
+      .name, .head { fill: #e6edf3; }
+      .sub, .lbl { fill: #9198a1; }
+    }
+  </style>
+  <defs>
+    <marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah-s" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah-c" d="M0,0 L10,5 L0,10 z"/></marker>
+    <marker id="p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah-p" d="M0,0 L10,5 L0,10 z"/></marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1000" height="470" rx="14"/>
+
+  <!-- Control -->
+  <text class="head" x="40" y="34">CONTROL</text>
+  <rect class="box ctl" x="40" y="48" width="170" height="64" rx="10"/>
+  <text class="name" x="125" y="76" text-anchor="middle">Tuya smart knob</text>
+  <text class="sub" x="125" y="96" text-anchor="middle">turn and press</text>
+
+  <rect class="box ctl" x="290" y="48" width="200" height="64" rx="10"/>
+  <text class="name" x="390" y="76" text-anchor="middle">Home Assistant</text>
+  <text class="sub" x="390" y="96" text-anchor="middle">dashboard, scripts, automations</text>
+
+  <rect class="box ctl" x="570" y="48" width="390" height="64" rx="10"/>
+  <text class="name" x="765" y="76" text-anchor="middle">Smart plugs</text>
+  <text class="sub" x="765" y="96" text-anchor="middle">power the WiiM Pro, the Denon and the Kenwood's supply</text>
+
+  <path class="control" d="M210,80 H284" marker-end="url(#c)"/>
+  <text class="lbl" x="250" y="132" text-anchor="middle">turn: volume</text>
+  <text class="lbl" x="250" y="147" text-anchor="middle">press: down, then off</text>
+  <path class="control" d="M490,80 H564" marker-end="url(#c)"/>
+  <text class="lbl" x="530" y="72" text-anchor="middle">on / off</text>
+  <path class="control" d="M390,112 V166 H655 V194" marker-end="url(#c)"/>
+  <text class="lbl" x="522" y="160" text-anchor="middle">Telnet: volume, bass, treble, sub</text>
+
+  <!-- Sound -->
+  <text class="head" x="40" y="186">SOUND</text>
+  <rect class="box" x="40" y="200" width="170" height="64" rx="10"/>
+  <text class="name" x="125" y="228" text-anchor="middle">Phone</text>
+  <text class="sub" x="125" y="248" text-anchor="middle">picks and plays the music</text>
+
+  <rect class="box" x="290" y="200" width="200" height="64" rx="10"/>
+  <text class="name" x="390" y="228" text-anchor="middle">WiiM Pro</text>
+  <text class="sub" x="390" y="248" text-anchor="middle">streamer</text>
+
+  <rect class="box" x="570" y="200" width="170" height="64" rx="10"/>
+  <text class="name" x="655" y="228" text-anchor="middle">Denon AVR-X2000</text>
+  <text class="sub" x="655" y="248" text-anchor="middle">amplifier</text>
+
+  <rect class="box" x="800" y="200" width="160" height="64" rx="10"/>
+  <text class="name" x="880" y="228" text-anchor="middle">Dali Phantom E80</text>
+  <text class="sub" x="880" y="248" text-anchor="middle">two, in the ceiling</text>
+
+  <path class="sound" d="M210,232 H284" marker-end="url(#s)"/>
+  <text class="lbl" x="250" y="222" text-anchor="middle">Bluetooth</text>
+  <path class="sound" d="M490,232 H564" marker-end="url(#s)"/>
+  <path class="sound" d="M740,232 H794" marker-end="url(#s)"/>
+
+  <rect class="box" x="290" y="340" width="200" height="64" rx="10"/>
+  <text class="name" x="390" y="368" text-anchor="middle">12 V 30 A power supply</text>
+  <text class="sub" x="390" y="388" text-anchor="middle">mains to car voltage</text>
+
+  <rect class="box" x="570" y="340" width="170" height="64" rx="10"/>
+  <text class="name" x="655" y="368" text-anchor="middle">Kenwood car amp</text>
+  <text class="sub" x="655" y="388" text-anchor="middle">1000 W Class D, mono</text>
+
+  <rect class="box" x="800" y="340" width="160" height="64" rx="10"/>
+  <text class="name" x="880" y="368" text-anchor="middle">Two Kenwood 10"</text>
+  <text class="sub" x="880" y="388" text-anchor="middle">subs, in parallel</text>
+
+  <path class="sound" d="M655,264 V334" marker-end="url(#s)"/>
+  <text class="lbl" x="665" y="304">sub out</text>
+  <path class="power" d="M490,372 H564" marker-end="url(#p)"/>
+  <text class="lbl" x="530" y="364" text-anchor="middle">12 V</text>
+  <path class="sound" d="M740,372 H794" marker-end="url(#s)"/>
+  <text class="lbl" x="880" y="424" text-anchor="middle">under the bathroom cabinet</text>
+
+  <!-- Key -->
+  <path class="sound" d="M40,446 H80"/><text class="lbl" x="88" y="450">sound</text>
+  <path class="control" d="M150,446 H190"/><text class="lbl" x="198" y="450">control</text>
+  <path class="power" d="M265,446 H305"/><text class="lbl" x="313" y="450">power</text>
+</svg>
