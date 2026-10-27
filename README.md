@@ -122,7 +122,8 @@ A **Tuya smart knob** on the wall does the everyday part. Turning it sets the vo
 
 *The Tuya smart knob (product photo, shown for reference).*
 
-How it all connects:
+
+**How it all connects:**
 
 [![Version 1 signal path. Sound: phone over Bluetooth to the WiiM Pro, to the Denon, to the two ceiling speakers; the Denon's sub out goes to the Kenwood car amp, powered by a 12 V 30 A supply, which drives the two subs. Control: the Tuya knob talks to Home Assistant, which switches the smart plugs and sets the Denon's volume, bass, treble and sub over Telnet.](images/signal-path.png)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/signal-path.svg "Open full size")
 
