@@ -193,6 +193,16 @@ Encouraged, I carried on designing with Claude to explore the full range of flow
 
 ▶ **[See the full flow in Figma](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=577-119)**
 
+### Try it in your browser
+
+The real dial's screens, running in your browser: the same code that runs on the knob, with a demo library of 226 albums and 5 playlists from my collection. Turn it with the outer ring, the scroll wheel or the arrow keys, and flick, swipe and tap on the screen. Playback is simulated.
+
+[![The dial in the browser, on an album with its play button](images/17-demo.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/17-demo.jpg "Open full size")
+
+*The demo on an album, ready to play.*
+
+▶ **[Play with the dial](https://sygad.github.io/music-assistant-smart-dial-v2/demo/)** (live once this repo is public)
+
 <br>
 
 ## 8. What's next
