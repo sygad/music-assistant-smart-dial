@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music Assistant Smart Dial</title>
+<meta name="description" content="The story so far: from ceiling speakers and car subs in the bathroom to a round touchscreen dial that plays Music Assistant.">
+<!-- Built by tools/build_page.py from README.md. Edit the README, then rebuild. -->
+<style>
+:root {
+  --bg: #ffffff;
+  --text: #1f2328;
+  --muted: #59636e;
+  --line: #d1d9e0;
+  --soft: #f6f8fa;
+  --accent: #0969da;
+  --num: #0969da;
+  --shadow: 0 1px 3px rgba(31, 35, 40, .12);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1117;
+    --text: #e6edf3;
+    --muted: #9198a1;
+    --line: #30363d;
+    --soft: #161b22;
+    --accent: #4493f8;
+    --num: #4493f8;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1117; --text: #e6edf3; --muted: #9198a1; --line: #30363d;
+  --soft: #161b22; --accent: #4493f8; --num: #4493f8; --shadow: none;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+}
+.page { max-width: 880px; margin: 0 auto; padding: 56px 24px 96px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+
+h1 { font-size: 40px; line-height: 1.15; letter-spacing: -.02em; margin: 0 0 20px; }
+h2 {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px;
+  font-size: 28px; line-height: 1.25; letter-spacing: -.01em;
+  margin: 104px 0 20px; padding-top: 28px; border-top: 1px solid var(--line);
+}
+h2 .num { color: var(--num); font-variant-numeric: tabular-nums; }
+h2 .when { font-size: 16px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
+h3 { font-size: 21px; margin: 56px 0 12px; }
+p, ul, ol { margin: 0 0 18px; }
+li { margin: 4px 0; }
+hr { display: none; }
+
+blockquote {
+  margin: 24px 0; padding: 14px 18px;
+  background: var(--soft); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: 0; }
+
+/* The story at a glance */
+ul.timeline { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--line); }
+ul.timeline li {
+  display: grid; grid-template-columns: 132px 1fr; gap: 16px;
+  position: relative; padding: 7px 0 7px 20px; margin: 0;
+}
+ul.timeline li::before {
+  content: ""; position: absolute; left: -6px; top: 16px;
+  width: 10px; height: 10px; border-radius: 50%; background: var(--accent);
+}
+ul.timeline .date { font-weight: 600; white-space: nowrap; }
+
+/* Images */
+figure { margin: 28px 0 36px; }
+figure a.zoom { display: inline-block; max-width: 100%; border-radius: 10px; cursor: zoom-in; }
+figure img {
+  display: block; max-width: 100%; height: auto;
+  border-radius: 10px; box-shadow: var(--shadow);
+}
+figure a.zoom:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+figcaption { margin-top: 10px; font-size: 15px; line-height: 1.5; color: var(--muted); }
+img.transparent { box-shadow: none; }
+
+footer { margin-top: 96px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 15px; color: var(--muted); }
+
+/* Pop-up viewer */
+.lb {
+  position: fixed; inset: 0; z-index: 10;
+  display: grid; grid-template-rows: 1fr auto;
+  background: #05080d; color: #e6edf3;
+}
+.lb[hidden] { display: none; }
+.lb-stage {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  padding: 56px 72px 12px;
+}
+.lb-img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  border-radius: 6px; user-select: none; -webkit-user-drag: none;
+}
+.lb-img.svg { width: 100%; height: 100%; }
+.lb.can-zoom .lb-img { cursor: zoom-in; }
+.lb.zoomed .lb-stage { overflow: auto; display: block; padding: 56px 16px 12px; }
+.lb.zoomed .lb-img { max-width: none; max-height: none; cursor: zoom-out; margin: 0 auto; }
+.lb-bar {
+  display: flex; gap: 16px; align-items: baseline; justify-content: space-between;
+  padding: 12px 24px 20px; font-size: 15px; line-height: 1.45;
+}
+.lb-cap { color: #e6edf3; max-width: 70ch; }
+.lb-meta { color: #9198a1; white-space: nowrap; }
+.lb button {
+  position: absolute; z-index: 1;
+  display: grid; place-items: center;
+  width: 48px; height: 48px; border: 0; border-radius: 50%;
+  background: rgba(255, 255, 255, .1); color: #fff; cursor: pointer;
+}
+.lb button:hover { background: rgba(255, 255, 255, .2); }
+.lb button:focus-visible { outline: 3px solid #4493f8; outline-offset: 2px; }
+.lb button svg { width: 24px; height: 24px; }
+.lb-close { top: 12px; right: 12px; }
+.lb-prev { left: 12px; top: calc(50% - 24px); }
+.lb-next { right: 12px; top: calc(50% - 24px); }
+.lb.zoomed .lb-prev, .lb.zoomed .lb-next { display: none; }
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  .page { padding: 32px 16px 72px; }
+  h1 { font-size: 30px; }
+  h2 { font-size: 23px; margin-top: 80px; }
+  ul.timeline li { grid-template-columns: 1fr; gap: 0; }
+  .lb-stage { padding: 56px 8px 8px; }
+  .lb-bar { flex-direction: column; gap: 4px; padding: 10px 16px 16px; }
+}
+</style>
+</head>
+<body>
+<main class="page">
+<h1>Music Assistant Smart Dial · version 2</h1>
+<p>A round touchscreen dial on the bathroom wall. It browses and plays music from <a href="https://www.music-assistant.io/" target="_blank" rel="noopener">Music Assistant</a>, and controls the volume, bass, treble and sub, without needing a phone. It's built on a Waveshare ESP32-S3 knob.</p>
+<p>This page tells the story so far, from the speakers in the ceiling to the dial. The firmware and a video of the dial working will be added here next. <strong>Click any image to see it larger.</strong></p>
+<blockquote>
+<p><strong>Video coming soon.</strong> The bathroom audio running, then the dial in action.</p>
+</blockquote>
+<hr>
+<h2>The story at a glance</h2>
+<ul class="timeline">
+<li><span class="date">2024</span><span>I wanted music in the bathroom that didn't sound awful</span></li>
+<li><span class="date">May 2024</span><span>Chose the ceiling speakers: Dali Phantom E80</span></li>
+<li><span class="date">June 2024</span><span>Ceiling finished, speakers in</span></li>
+<li><span class="date">July 2024</span><span>Tried two hi-fi subs. They couldn't keep up</span></li>
+<li><span class="date">October 2024</span><span>Built enclosures for the ceiling speakers</span></li>
+<li><span class="date">May 2025</span><span>Built a sub box from plywood</span></li>
+<li><span class="date">June 2025</span><span>Car subs fitted under the cabinet</span></li>
+<li><span class="date">2025</span><span><strong>Version 1:</strong> Home Assistant controls the amps; a Tuya knob sets the volume</span></li>
+<li><span class="date">Early 2026</span><span>Looked for a better control: the Spotify Car Thing, then the Waveshare knob</span></li>
+<li><span class="date">March 2026</span><span><strong>Version 2:</strong> designs in Figma, a web prototype, the same designs running on the knob, tested with five people</span></li>
+<li><span class="date">Next</span><span>The firmware and the dial in action, here</span></li>
+</ul>
+<hr>
+<h2><span class="num">1</span><span>The problem</span></h2>
+<p>I wanted to listen to music in the bathroom, and I didn't want it to sound awful. Small Bluetooth speakers weren't going to cut it.</p>
+<p>I looked at portable Bluetooth speakers and at much larger portable party speakers. Neither worked. They either took up too much space in a small bathroom or needed a constant power supply, and running mains power to a speaker in a bathroom isn't realistically achievable.</p>
+<p>So it had to be <strong>speakers permanently mounted in the ceiling</strong>.</p>
+<h2><span class="num">2</span><span>The ceiling speakers</span><span class="when">May to October 2024</span></h2>
+<p>I chose the <strong>Dali Phantom E80</strong>. They're among the largest ceiling speakers rated for humid rooms that don't cost an absolute fortune.</p>
+<figure><a class="zoom" href="images/01-ceiling-speaker.jpg"><img src="images/01-ceiling-speaker.jpg" alt="A Dali Phantom E80 ceiling speaker beside its round grille"></a></figure>
+<figure><a class="zoom" href="images/04-ceiling-finished.jpg"><img src="images/04-ceiling-finished.jpg" alt="The finished ceiling: two speakers with grilles, spotlights, the MVHR vent and a sensor"></a><figcaption>June 2024: the ceiling finished, with the two speakers among the spotlights, the MVHR vent and the motion sensor.</figcaption></figure>
+<p>Above the ceiling, each speaker got its own enclosure, bolted between the joists.</p>
+<figure><a class="zoom" href="images/02-speaker-enclosure.jpg"><img src="images/02-speaker-enclosure.jpg" alt="The speaker enclosure, seen from the loft side"></a><figcaption>October 2024: a speaker enclosure, seen from the loft side.</figcaption></figure>
+<figure><a class="zoom" href="images/03-enclosures-on-joists.jpg"><img src="images/03-enclosures-on-joists.jpg" alt="Both enclosures bolted between the joists, among the ventilation ducts"></a><figcaption>Both enclosures bolted to the joists, among the MVHR ducting.</figcaption></figure>
+<h2><span class="num">3</span><span>Finding the bass</span><span class="when">July 2024 to June 2025</span></h2>
+<p>The ceiling speakers sounded great, but there was never going to be enough bass from them alone.</p>
+<p>I tried a couple of Yamaha hi-fi subs. They couldn't keep up with what the ceiling speakers were putting out.</p>
+<figure><a class="zoom" href="images/05-hifi-sub-trial.jpg"><img src="images/05-hifi-sub-trial.jpg" alt="Two Yamaha hi-fi subs on the floor of the half-built bathroom"></a><figcaption>July 2024: the hi-fi subs on trial. Not loud enough.</figcaption></figure>
+<p>I needed a more powerful sub, and the hard part was where to put it:</p>
+<ul>
+<li><strong>Ceiling-mounted subs?</strong> No. The ceiling was already busy: spotlights, the MVHR, the motion sensors and the speakers.</li>
+<li><strong>Concealed in a wall?</strong> Hard to do in a small bathroom.</li>
+<li><strong>Space that wasn't being used?</strong> ✅ The space under the cabinet was just large enough for <strong>two 10-inch subwoofers</strong>.</li>
+</ul>
+<p>Subs and an amp made for humid rooms would have cost far too much. So I looked at what I already had: a collection of old car stereo parts. Two Kenwood 10-inch car subs went into a plywood box built to fit under the cabinet.</p>
+<figure><a class="zoom" href="images/06-sub-box.jpg"><img src="images/06-sub-box.jpg" alt="The plywood sub box under construction, with an internal divider"></a><figcaption>May 2025: the sub box.</figcaption></figure>
+<figure><a class="zoom" href="images/07-subs-under-cabinet.jpg"><img src="images/07-subs-under-cabinet-small.jpg" alt="The tall bathroom cabinet with the two subs in the space underneath"></a><figcaption>June 2025: the subs in the space under the bathroom cabinet.</figcaption></figure>
+<figure><a class="zoom" href="images/08-subs-close-up.jpg"><img src="images/08-subs-close-up.jpg" alt="Close-up of the two Kenwood subs under the cabinet"></a><figcaption>The two 10-inch Kenwood subs, up close.</figcaption></figure>
+<h2><span class="num">4</span><span>The amps</span><span class="when">powering car parts from the mains</span></h2>
+<p>A car amp needs 12 volts, so I connected the Kenwood amp to a <strong>12 V 30 A power supply</strong> to see whether it could drive the subs at full volume. It could.</p>
+<figure><a class="zoom" href="images/09-amp-rack.jpg"><img src="images/09-amp-rack.jpg" alt="The amp rack: the Kenwood car amp above the Denon receiver, with the WiiM Pro streamer on the top shelf"></a><figcaption>The rack: the Kenwood car amp above the Denon receiver, with the WiiM Pro on the top shelf.</figcaption></figure>
+<ul>
+<li><strong>Amplifier:</strong> Denon AVR-X2000</li>
+<li><strong>Ceiling speakers:</strong> two Dali Phantom E80</li>
+<li><strong>Sub amp:</strong> Kenwood 1000 W Class D mono car amp, on a 12 V 30 A power supply</li>
+<li><strong>Subs:</strong> two Kenwood 10-inch car subs, 1000 W peak and 250 W RMS each, wired in parallel</li>
+<li><strong>Streamer:</strong> <a href="https://www.wiimhome.com/wiimpro/overview" target="_blank" rel="noopener">WiiM Pro</a></li>
+</ul>
+<p>The subs have now been in the bathroom for over a year, through at least one winter, and they're holding up very well. The car amp and its power supply turned out to be a very cheap way to get a lot of bass.</p>
+<h2><span class="num">5</span><span>Version 1: Home Assistant in control</span><span class="when">2025</span></h2>
+<p>I wanted to know whether I could control the amps from Home Assistant and have one interface for the music.</p>
+<p>The Denon can be controlled over Telnet. I left it entirely to Claude and Home Assistant to work out how. I didn't write any of the code: I prompted and tested my way to the solution I have today. I asked for volume, bass, treble and sub control, and used <a href="https://github.com/piitaya/lovelace-mushroom" target="_blank" rel="noopener">Mushroom</a> sliders to drive the scripts and automations.</p>
+<figure><a class="zoom" href="images/11-version-1-dashboard.jpg"><img src="images/11-version-1-dashboard-small.jpg" alt="The version 1 Home Assistant dashboard: now playing, then sliders for volume, treble, bass and sub"></a><figcaption>The version 1 dashboard in Home Assistant: what's playing, then sliders for volume, treble, bass and sub.</figcaption></figure>
+<p>A <strong>Tuya smart knob</strong> on the wall does the everyday part. Turning it sets the volume. Pressing it turns the volume down and then switches off the smart plugs, which switch off the amps.</p>
+<figure><a class="zoom" href="images/10-tuya-knob.jpg"><img class="transparent" src="images/10-tuya-knob-small.png" alt="The Tuya smart knob"></a><figcaption>The Tuya smart knob (product photo, shown for reference).</figcaption></figure>
+<p>How it all connects:</p>
+<figure><a class="zoom" href="images/signal-path.svg"><img src="images/signal-path.png" alt="Version 1 signal path. Sound: phone over Bluetooth to the WiiM Pro, to the Denon, to the two ceiling speakers; the Denon's sub out goes to the Kenwood car amp, powered by a 12 V 30 A supply, which drives the two subs. Control: the Tuya knob talks to Home Assistant, which switches the smart plugs and sets the Denon's volume, bass, treble and sub over Telnet."></a></figure>
+<h3>What version 1 taught me</h3>
+<p>As a proof of concept it works, and it works well. But playing music takes too many steps:</p>
+<ol>
+<li>Turn the music on from the Home Assistant dashboard. That powers up the amps and the WiiM Pro through the smart plugs.</li>
+<li>Connect my phone over Bluetooth.</li>
+<li>Choose the music on the phone and play it.</li>
+</ol>
+<p>The phone shouldn't be needed at all.</p>
+<h2><span class="num">6</span><span>Looking for a successor</span><span class="when">early 2026</span></h2>
+<p>I really liked the look of the <strong>Spotify Car Thing</strong>. A screen and a dial would have made an excellent successor. But it's <a href="https://en.wikipedia.org/wiki/Car_Thing" target="_blank" rel="noopener">discontinued</a>, and making it do anything else takes considerable hacking.</p>
+<figure><a class="zoom" href="images/12-spotify-car-thing.jpg"><img src="images/12-spotify-car-thing.jpg" alt="The Spotify Car Thing, a small screen with a dial, mounted in a car"></a><figcaption>The Spotify Car Thing (product photo, shown for reference).</figcaption></figure>
+<p>Thankfully, Waveshare makes an ESP32 rotary dial with a round touchscreen: the <a href="https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm" target="_blank" rel="noopener">ESP32-S3-Knob-Touch-LCD-1.8</a>.</p>
+<figure><a class="zoom" href="images/13-waveshare-knob.jpg"><img src="images/13-waveshare-knob-small.jpg" alt="The Waveshare ESP32-S3 knob with its round touchscreen"></a><figcaption>The Waveshare ESP32-S3 knob (product photo, shown for reference).</figcaption></figure>
+<h2><span class="num">7</span><span>Designing version 2</span><span class="when">March 2026</span></h2>
+<p>I designed some <a href="https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=0-1" target="_blank" rel="noopener">early concepts in Figma</a> of what it might look like. Then I worked with Claude to find out whether those designs could actually run on the device.</p>
+<p>Yes, yes they can.</p>
+<figure><a class="zoom" href="images/14-early-concept.jpg"><img src="images/14-early-concept.jpg" alt="Early Figma concept: a menu of Lights, Music, Switches and CCTV, each drilling down into its own screens"></a><figcaption>An early concept: one dial for lights, music, switches and CCTV. Version 2 focuses on music.</figcaption></figure>
+<h3>The prototype</h3>
+<p>An early interactive prototype explored the screens and how the dial and touch would work. It was built in the browser and on the knob itself at the same time: the browser version to try ideas quickly, the knob to check that the Figma designs really worked on the Waveshare hardware.</p>
+<figure><a class="zoom" href="images/16-prototype.jpg"><img src="images/16-prototype.jpg" alt="The prototype in the browser: the round screen on Now Playing with an album cover and the volume arc, beside a panel of screens, a virtual rotary encoder, touch gestures and the current state"></a><figcaption>The prototype on Now Playing. The panel on the right stands in for the knob: jump to any screen, turn the encoder, swipe and tap.</figcaption></figure>
+<p>▶ <strong><a href="https://sygad.github.io/rotary-dial-media-prototype/" target="_blank" rel="noopener">Try the prototype</a></strong></p>
+<blockquote>
+<p>This is <strong>only a prototype</strong>: the first version, made to see and validate whether the Figma designs could be used on the Waveshare device. The real dial is built separately.</p>
+</blockquote>
+<h3>Testing it with people</h3>
+<p>I took five people I've worked with through it: firmware engineers, developers and designers, all with a keen interest in music and Home Assistant. They saw version 1, the full version 2 flow and the prototype.</p>
+<p>They really liked the idea, and they're looking forward to seeing the real thing in action.</p>
+<h3>The full flow</h3>
+<p>Encouraged, I carried on designing with Claude to explore the full range of flows, micro-interactions and navigation.</p>
+<figure><a class="zoom" href="images/15-full-flow.jpg"><img src="images/15-full-flow.jpg" alt="The full flow: every screen of the dial in six journeys (start and menu, albums, voice search, playlists, recent, music off) and the player, with arrows for what the person does"></a><figcaption>Every screen and how you get between them. Open it full size to read the notes under each screen.</figcaption></figure>
+<p>▶ <strong><a href="https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=577-119" target="_blank" rel="noopener">See the full flow in Figma</a></strong></p>
+<h2><span class="num">8</span><span>What's next</span></h2>
+<ul>
+<li>The firmware for the dial, here in this repo.</li>
+<li>A video of the dial in action.</li>
+</ul>
+<hr>
+<h2>Credits</h2>
+<ul>
+<li><strong>Photos of the build, the dashboard, the Figma designs and the prototype:</strong> mine.</li>
+<li><strong>Tuya smart knob, Spotify Car Thing, Waveshare knob:</strong> product photos, shown for reference only. They belong to their makers.</li>
+<li><strong><a href="https://www.music-assistant.io/" target="_blank" rel="noopener">Music Assistant</a>:</strong> the music library and player behind version 2.</li>
+<li><strong><a href="https://github.com/piitaya/lovelace-mushroom" target="_blank" rel="noopener">Mushroom</a>:</strong> the sliders on the version 1 dashboard.</li>
+</ul>
+<h2>Licence</h2>
+<p><a href="https://github.com/sygad/music-assistant-smart-dial-v2/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a> for my own work here. The product photos and anything third-party keep their own licences.</p>
+<footer>
+  The project on GitHub: <a href="https://github.com/sygad/music-assistant-smart-dial-v2">sygad/music-assistant-smart-dial-v2</a>
+</footer>
+</main>
+
+<div class="lb" hidden role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lb-stage"><img class="lb-img" alt=""></div>
+  <div class="lb-bar"><span class="lb-cap"></span><span class="lb-meta"></span></div>
+  <button class="lb-close" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <button class="lb-prev" type="button" aria-label="Previous image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lb-next" type="button" aria-label="Next image"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var links = Array.prototype.slice.call(document.querySelectorAll("a.zoom"));
+  var lb = document.querySelector(".lb");
+  var stage = lb.querySelector(".lb-stage");
+  var img = lb.querySelector(".lb-img");
+  var cap = lb.querySelector(".lb-cap");
+  var meta = lb.querySelector(".lb-meta");
+  var index = -1, opener = null, pushed = false;
+  var touch = window.matchMedia("(pointer: coarse)").matches;
+
+  function caption(a) {
+    var fc = a.closest("figure") && a.closest("figure").querySelector("figcaption");
+    return fc ? fc.textContent : (a.querySelector("img").alt || "");
+  }
+
+  function show(i) {
+    index = (i + links.length) % links.length;
+    var a = links[index];
+    lb.classList.remove("zoomed", "can-zoom");
+    var isSvg = /\.svg$/i.test(a.getAttribute("href"));
+    img.classList.toggle("svg", isSvg);
+    // the page's own copy shows at once; the full-size file replaces it when it arrives
+    img.src = a.querySelector("img").currentSrc || a.querySelector("img").src;
+    img.alt = a.querySelector("img").alt;
+    var full = new Image();
+    full.onload = function () { if (links[index] === a) { img.src = full.src; checkZoom(); } };
+    full.src = a.getAttribute("href");
+    cap.textContent = caption(a);
+    meta.textContent = (index + 1) + " / " + links.length;
+  }
+
+  // zoom only helps when the full image is bigger than the space it's fitted into
+  function checkZoom() {
+    var bigger = !img.classList.contains("svg") &&
+      (img.naturalWidth > img.clientWidth * 1.15 || img.naturalHeight > img.clientHeight * 1.15);
+    lb.classList.toggle("can-zoom", bigger);
+    meta.textContent = (index + 1) + " / " + links.length + (bigger ? " · " + (touch ? "tap" : "click") + " the image to zoom" : "");
+  }
+
+  function open(i) {
+    opener = document.activeElement;
+    lb.hidden = false;
+    document.documentElement.style.overflow = "hidden";
+    show(i);
+    // so a phone's back gesture closes the pop-up instead of leaving the page
+    history.pushState({ lb: true }, "");
+    pushed = true;
+    lb.querySelector(".lb-close").focus();
+  }
+
+  function close(fromHistory) {
+    if (lb.hidden) return;
+    lb.hidden = true;
+    lb.classList.remove("zoomed");
+    document.documentElement.style.overflow = "";
+    img.removeAttribute("src");
+    if (pushed && !fromHistory) history.back();
+    pushed = false;
+    if (opener) opener.focus({ preventScroll: true });
+  }
+
+  function toggleZoom(e) {
+    if (!lb.classList.contains("can-zoom") && !lb.classList.contains("zoomed")) return;
+    var r = img.getBoundingClientRect();
+    var fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+    lb.classList.toggle("zoomed");
+    if (lb.classList.contains("zoomed")) {
+      // keep the spot that was clicked under the pointer
+      stage.scrollLeft = fx * img.offsetWidth - stage.clientWidth / 2;
+      stage.scrollTop = fy * img.offsetHeight - stage.clientHeight / 2;
+    }
+  }
+
+  links.forEach(function (a, i) {
+    a.addEventListener("click", function (e) {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      e.preventDefault();
+      open(i);
+    });
+  });
+
+  lb.querySelector(".lb-close").addEventListener("click", function () { close(false); });
+  lb.querySelector(".lb-prev").addEventListener("click", function () { show(index - 1); });
+  lb.querySelector(".lb-next").addEventListener("click", function () { show(index + 1); });
+  img.addEventListener("click", function (e) { e.stopPropagation(); toggleZoom(e); });
+  img.addEventListener("load", function () { if (!lb.hidden) checkZoom(); });
+  stage.addEventListener("click", function (e) { if (e.target === stage) close(false); });
+  window.addEventListener("resize", function () { if (!lb.hidden && !lb.classList.contains("zoomed")) checkZoom(); });
+  window.addEventListener("popstate", function () { pushed = false; close(true); });
+
+  document.addEventListener("keydown", function (e) {
+    if (lb.hidden) return;
+    if (e.key === "Escape") { if (lb.classList.contains("zoomed")) lb.classList.remove("zoomed"); else close(false); }
+    else if (e.key === "ArrowLeft" && !lb.classList.contains("zoomed")) show(index - 1);
+    else if (e.key === "ArrowRight" && !lb.classList.contains("zoomed")) show(index + 1);
+    else if (e.key === "Tab") {
+      // keep focus inside the pop-up
+      var f = Array.prototype.slice.call(lb.querySelectorAll("button"));
+      var k = f.indexOf(document.activeElement);
+      e.preventDefault();
+      f[(k + (e.shiftKey ? -1 : 1) + f.length) % f.length].focus();
+    }
+  });
+
+  // swipe left and right on a phone
+  var sx = null, sy = null;
+  stage.addEventListener("touchstart", function (e) {
+    if (lb.classList.contains("zoomed") || e.touches.length !== 1) { sx = null; return; }
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  stage.addEventListener("touchend", function (e) {
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(index + (dx < 0 ? 1 : -1));
+    sx = null;
+  });
+})();
+</script>
+</body>
+</html>
