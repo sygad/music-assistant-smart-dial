@@ -1,0 +1,20 @@
+# Subwoofer helper -> amp.
+# Home Assistant automation for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new automation in YAML mode. Search this file for CHANGE.
+id: '1775589099379'
+alias: Subwoofer Slider
+description: Sends CVSW (channel volume subwoofer) directly to the Denon AVR when the subwoofer slider helper changes. Bypasses the blueprint script which used PSSWL (LFE bass-management trim) — CVSW is the per-channel subwoofer trim that actually controls perceived sub level.
+triggers:
+- entity_id: input_number.bathroom_amp_subwoofer
+  trigger: state
+actions:
+- variables:
+    v: '{{ trigger.to_state.state | float | round | int }}'
+    clamped: '{{ [[trigger.to_state.state | float | round | int, -12] | max, 12] | min }}'
+    encoded: '{{ 50 + ([[trigger.to_state.state | float | round | int, -12] | max, 12] | min) }}'
+- target:
+    entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+  data:
+    command: /goform/formiPhoneAppDirect.xml?CVSW%20{{ encoded }}
+  action: denonavr.get_command
+mode: restart

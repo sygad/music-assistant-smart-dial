@@ -1,0 +1,58 @@
+# The music helper: powers the amps on, or fades, stops the stream and powers them off.
+# Home Assistant automation for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new automation in YAML mode. Search this file for CHANGE.
+id: '1775853369903'
+alias: Music Fade Off
+description: 'Runs when the bathroom music helper is changed directly (ignores changes made by other automations or scripts). On: turns on the Denon amp and bathroom sub PSU switches, then starts script.bathroom_music_amp_ready and finishes - that script does the waiting for the amp and sets the 30 starting volume. Off: keeps the helper on for the fade, calls script.bathroom_music_fade_off and WAITS for it to finish, then turns the amp and sub PSU off. It calls the script directly rather than script.turn_on plus a fixed 11 second delay, because the fade''s duration now varies with how far the volume has to travel - a fixed delay could cut power mid-fade and leave the amp remembering a loud volume for next time. Waiting on the script removes that second number that had to agree with the first. Mode stays single on purpose: the off-branch turns the helper back on mid-fade, and restart mode would let that abort its own fade. That is why the on-branch must not wait for anything. It used to wait
+  up to 90 seconds inline for the amp to come online, which held this automation busy; a Music off arriving in that window was dropped as failed_single, so nothing faded, nothing powered down, and the knob''s next touch turned the helper straight back on - Darren had to ask for Music off twice (1 Nov 2026, amp took 43 seconds to appear). The waiting now happens in its own script, so an off is never dropped. If the amp entity is genuinely stuck, Amp Connection Recovery reloads its integration at the 3 minute mark and then pushes the volume value to the amp. 2 Nov 2026: the off-branch now also stops the music. Nothing anywhere did - turning the bathroom music off faded the volume and cut the amp''s power, and Music Assistant carried on playing the queue into an amp that was switched off, for as long as it took. Darren walked into the bathroom after twenty minutes away, woke the dial, and The Doors came out of it mid-track: Music Auto Off had switched everything off ages earlier and the stream
+  had been running silently the whole time, so powering the amp simply revealed it. It also meant the streamer worked around the clock for nothing and the queue wandered through his library unheard. The stop goes after script.bathroom_music_fade_off has finished, so the music still fades out properly rather than being cut dead, and before the switches, so nothing is left running behind a dead amp. media_stop rather than media_pause because the point is a clean slate: waking the dial should find nothing playing. continue_on_error, because a streamer that cannot be reached must never stop the amp being powered down. The dial''s own Music off already stopped playback through its player interface, so this is the path everything else uses - the dashboard toggle and Music Auto Off.'
+triggers:
+- entity_id: input_boolean.bathroom_music
+  trigger: state
+conditions:
+- condition: template
+  value_template: '{{ trigger.to_state.context.parent_id is none }}'
+actions:
+- choose:
+  - conditions:
+    - condition: state
+      entity_id: input_boolean.bathroom_music
+      state: 'on'
+    sequence:
+    - action: switch.turn_on
+      target:
+        entity_id:
+        - switch.attic_storage_swb1_denon_amp  # CHANGE: the smart plug that powers your amp
+        - switch.attic_storage_swb2_bathroom_sub_psu  # CHANGE: the smart plug for the sub amp power supply (delete the line if you have none)
+      data: {}
+    - action: script.turn_on
+      target:
+        entity_id: script.bathroom_music_amp_ready
+      note: 'script.turn_on, not a direct call: this branch must not hold mode single while the amp boots'
+  - conditions:
+    - condition: state
+      entity_id: input_boolean.bathroom_music
+      state: 'off'
+    sequence:
+    - action: script.turn_off
+      target:
+        entity_id: script.bathroom_music_amp_ready
+      data: {}
+      note: a pending volume-30 must not land on an amp that is being powered off
+    - action: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.bathroom_music
+      data: {}
+    - action: script.bathroom_music_fade_off
+    - action: media_player.media_stop
+      target:
+        entity_id: media_player.bathroom_streamer_ma  # CHANGE: your streamer as a Music Assistant player
+      continue_on_error: true
+      note: 'After the fade, before the power goes: stop the music itself. Nothing used to, and the streamer went on playing into a dead amp.'
+    - action: switch.turn_off
+      target:
+        entity_id:
+        - switch.attic_storage_swb1_denon_amp  # CHANGE: the smart plug that powers your amp
+        - switch.attic_storage_swb2_bathroom_sub_psu  # CHANGE: the smart plug for the sub amp power supply (delete the line if you have none)
+      data: {}
+mode: single

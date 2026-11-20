@@ -1,0 +1,133 @@
+:root {
+  --bg: #101112;
+  --panel: #1a1b1d;
+  --line: #2a2c2f;
+  --text: #e8e8e6;
+  --muted: #9a9b98;
+  --teal: #3c8194;
+  --size: min(520px, calc(100vw - 32px));
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+/* phones flash a blue box over whatever is tapped; the knob has no such thing */
+html { -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+}
+
+main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 40px; }
+
+header h1 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: 0.01em; }
+header p { margin: 4px 0 0; color: var(--muted); }
+
+.stage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+/* ---- The knob ---- */
+.device {
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  flex: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The ring stays put (its shadow mustn't swing round); the knurled face inside
+ * it turns, on its own compositor layer so turning never repaints. */
+.ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  cursor: grab;
+  background: #2f3033;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.ring.turning { cursor: grabbing; }
+
+.knurl {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 69%, rgba(0, 0, 0, 0.35) 70%, transparent 72%),
+    repeating-conic-gradient(from 0deg, #3b3d40 0deg 3deg, #2a2b2e 3deg 6deg);
+  will-change: transform;
+  pointer-events: none;
+}
+.knurl.settle { transition: transform 90ms ease-out; }
+
+.bezel {
+  position: absolute;
+  inset: 12.5%;
+  border-radius: 50%;
+  background: #000;
+  box-shadow: 0 0 0 2px #0a0a0a, 0 0 0 5px #1e1f21, inset 0 0 12px rgba(0, 0, 0, 0.9);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+#screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  cursor: pointer;
+  touch-action: none;
+}
+
+/* ---- Panel ---- */
+.panel { flex: 1 1 300px; max-width: 420px; display: grid; gap: 16px; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.card h2 { margin: 0 0 8px; font-size: 15px; font-weight: 600; }
+.hint { margin: 0 0 12px; color: var(--muted); }
+.hint.live { color: var(--text); }
+.note { margin: 10px 0 0; color: var(--muted); font-size: 13px; }
+
+#voice-input {
+  width: 100%;
+  font: inherit;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0e0f10;
+  color: var(--text);
+  outline: none;
+}
+#voice-input:disabled { opacity: 0.5; }
+#voice-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(60, 129, 148, 0.35); }
+#voice.listening { border-color: var(--teal); }
+
+dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; }
+dt { color: var(--muted); }
+dd { margin: 0; }
+kbd {
+  font: 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #0e0f10;
+}
+
+.status { margin: 0; color: var(--muted); font-size: 13px; }

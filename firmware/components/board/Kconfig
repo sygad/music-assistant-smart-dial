@@ -1,0 +1,74 @@
+menu "Bathroom Knob"
+
+    menu "Display"
+
+        choice KNOB_RENDER_MODE
+            prompt "LVGL render mode"
+            default KNOB_RENDER_PARTIAL
+            help
+                How frames are drawn and sent to the panel. The hardware test
+                measures each to pick the smoothest with the least tearing.
+
+            config KNOB_RENDER_PARTIAL
+                bool "Partial: two 40-line buffers in internal RAM"
+            config KNOB_RENDER_FULL
+                bool "Full: two full frames in PSRAM, whole screen redrawn"
+            config KNOB_RENDER_DIRECT
+                bool "Direct: two full frames in PSRAM, only changes redrawn, whole frame sent"
+        endchoice
+
+        config KNOB_LCD_PCLK_MHZ
+            int "QSPI clock (MHz)"
+            range 10 80
+            default 80
+            help
+                80 MHz measured stable on this panel (26 Oct 2026).
+
+    endmenu
+
+    menu "Power"
+
+        config KNOB_LIGHT_SLEEP
+            bool "Stop the processor while the screen is off"
+            default y
+            help
+                Automatic light sleep whenever the dial is asleep. Without it
+                the processor keeps running at its lowest clock around the
+                clock, which measured 19% of the battery an hour on 3 Nov 2026
+                - sleeping saved almost nothing.
+
+                The USB console is not given up for it: IDF holds light sleep
+                off while a USB host is actually plugged in, so bench work is
+                unaffected and only a cable-free dial on the wall sleeps. A
+                console left watching a sleeping dial goes quiet until it is
+                woken.
+
+        config KNOB_DEEP_SLEEP
+            bool "Drop to deep sleep after a long spell untouched"
+            default y
+            help
+                CORE_DEEP_SLEEP_MS after the last touch or detent, the dial powers
+                almost everything down. It comes back on a turn of the knob - a
+                tap cannot wake it, because the touch chip is read over I2C and
+                nothing is running to read it - and takes a few seconds, since
+                Wi-Fi, Music Assistant and the covers all have to come back.
+
+                It wakes itself on a timer every CORE_DEEP_SLEEP_CHECK_MS as
+                well, behind a dark screen, to report its charge and ask whether
+                a new firmware is waiting: a dial in deep sleep is off the
+                network, so without that an update could never land unattended.
+
+                Both timings live in core/core.h with every other timing in
+                this project; this only decides whether it happens at all. Turn
+                it off for bench work where a dial that disappears off the
+                network mid-test is a nuisance.
+
+    endmenu
+
+    config KNOB_BENCH_ON_BOOT
+        bool "Run the scripted performance test at boot"
+        default n
+        help
+            It can also be started at any time by typing "bench" on the USB serial port.
+
+endmenu

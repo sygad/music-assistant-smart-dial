@@ -1,0 +1,26 @@
+# Keeps the streamer at full volume so the Denon is the only volume.
+# Home Assistant automation for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new automation in YAML mode. Search this file for CHANGE.
+id: '1793470955294'
+alias: Bathroom Streamer Volume Lock
+description: 'Holds the bathroom streamer at full so the Denon is the only volume control in that room (Darren, 31 Oct 2026). The streamer and the amp are in series, so anything that attenuates at the streamer quietly moves the range of every other control and the top of the dial stops being the top of the amp. It was found at 69 rather than 100 on 31 Oct, with a Bluetooth session on it in the early hours of 25 Oct - a phone''s volume buttons write to the device over AVRCP - and nothing noticed for a week. The knob sets it to 100 whenever it plays; this covers everything else, including playback the knob had no part in. The five second wait keeps it clear of the knob''s crossfade, which dips this same volume and brings it back, moving it every 50ms while it fades, so the wait never elapses in the middle of one - media_player.volume_changed has no ''for'' of its own, hence the plain state trigger on the attribute. It targets the WiiM integration''s own entity rather than the Music Assistant
+  one, because a phone on Bluetooth is not playing through Music Assistant at all. Daniel''s Amp is deliberately not included: it is a WiiM Amp with no separate amplifier after it, so its own volume IS the volume there.'
+triggers:
+- trigger: state
+  entity_id: media_player.bathroom_streamer  # CHANGE: your streamer, from its own integration
+  attribute: volume_level
+  for: 00:00:05
+- trigger: homeassistant
+  event: start
+conditions:
+- condition: numeric_state
+  entity_id: media_player.bathroom_streamer  # CHANGE: your streamer, from its own integration
+  attribute: volume_level
+  below: 1
+actions:
+- action: media_player.volume_set
+  target:
+    entity_id: media_player.bathroom_streamer  # CHANGE: your streamer, from its own integration
+  data:
+    volume_level: 1
+mode: single

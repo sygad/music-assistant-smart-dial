@@ -1,0 +1,10 @@
+# Sends treble (-6 to +6 dB) to the Denon. Uses the blueprint.
+# Home Assistant script for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new script in YAML mode. Search this file for CHANGE.
+alias: Amp Treble Control Settings
+use_blueprint:
+  path: denon_avr_audio_control.yaml
+  input:
+    control: treble
+    denon_media_player: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+description: ''

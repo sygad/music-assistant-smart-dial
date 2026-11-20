@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build index.html (the GitHub Pages version of the story) from README.md.
+"""Build index.html (the GitHub Pages version of the story) from STORY.md.
 
-The README stays the one source. GitHub renders it to HTML (`gh api markdown`), this script
+STORY.md stays the one source. GitHub renders it to HTML (`gh api markdown`), this script
 reshapes that HTML for the page (figures with captions, numbered headings, the timeline) and
 drops it into tools/page.html, which adds the pop-up image viewer.
 
@@ -13,10 +13,10 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-REPO = "sygad/music-assistant-smart-dial-v2"
+REPO = "sygad/music-assistant-smart-dial"
 FULL_SIZE = f"https://github.com/{REPO}/raw/main/images/"
 
-readme = (ROOT / "README.md").read_text()
+readme = (ROOT / "STORY.md").read_text()
 html = subprocess.run(
     ["gh", "api", "markdown", "--input", "-"],
     input=json.dumps({"text": readme, "mode": "gfm"}),

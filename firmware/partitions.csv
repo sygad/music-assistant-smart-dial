@@ -1,0 +1,21 @@
+# Two app slots, so the knob can be updated over the air (2 Nov 2026). It is
+# mounted on the bathroom wall and Darren is not taking it down again, so the
+# only USB flash left is the one that installs this table.
+#
+# 16 MB of flash and an app of under 3 MB, so 6 MB a slot is more than twice
+# what is needed and leaves 3.9 MB spare at the end for anything later.
+#
+# nvs stays at 0x9000 at its old size on purpose: it holds whether the motor
+# ticks, which is meant to survive a reflash, and moving it would lose it.
+#
+# otadata is which slot the bootloader starts and whether that slot has yet
+# proved itself. A slot that is written and never marked good is put back by
+# the bootloader on the next boot (CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE), so
+# a bad build costs a reboot rather than a trip up the stairs.
+#
+# Name,   Type, SubType, Offset,  Size
+nvs,      data, nvs,     0x9000,  0x6000
+phy_init, data, phy,     0xf000,  0x1000
+otadata,  data, ota,     0x10000, 0x2000
+ota_0,    app,  ota_0,   0x20000, 0x600000
+ota_1,    app,  ota_1,   0x620000, 0x600000

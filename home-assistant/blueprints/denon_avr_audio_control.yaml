@@ -1,0 +1,92 @@
+# Script blueprint: sends a volume, bass, treble or subwoofer level to a Denon AVR.
+# The three amp-*.yaml scripts are built on it. Explained in parts/06-home-assistant/README.md.
+# Copy to config/blueprints/script/denon_avr_audio_control.yaml and reload scripts.
+blueprint:
+  name: Denon AVR Audio Control
+  description: >
+    Adjust master volume, bass, treble, or subwoofer level on a Denon (or
+    Marantz) AVR connected via the built-in `denonavr` integration.
+
+    Create one script per control (Volume, Bass, Treble, Sub) and call it
+    from a dashboard slider, passing the desired level as `value`.
+
+    Ranges:
+      volume     0..98       (Denon scale, 80 ~ 0 dB)
+      bass       -6..+6 dB
+      treble     -6..+6 dB
+      subwoofer  -12..+12 dB
+  domain: script
+  input:
+    denon_media_player:
+      name: Denon media player
+      description: The media_player entity from the Denon AVR integration.
+      selector:
+        entity:
+          filter:
+            integration: denonavr
+            domain: media_player
+    control:
+      name: Control
+      description: Which audio parameter this script instance will adjust.
+      selector:
+        select:
+          options:
+            - label: "Master Volume (0–98)"
+              value: volume
+            - label: "Bass (-6 to +6 dB)"
+              value: bass
+            - label: "Treble (-6 to +6 dB)"
+              value: treble
+            - label: "Subwoofer Level (-12 to +12 dB)"
+              value: subwoofer
+
+mode: restart
+icon: mdi:audio-video
+
+fields:
+  value:
+    name: Value
+    description: Level to set. Range depends on configured control.
+    required: true
+    selector:
+      number:
+        min: -12
+        max: 98
+        step: 1
+        mode: slider
+
+sequence:
+  - variables:
+      control: !input control
+      target_player: !input denon_media_player
+      v: "{{ value | int }}"
+      cmd: >-
+        {% if control == 'volume' %}
+          {% set vol = [[v, 0] | max, 98] | min %}
+          MV{{ '%02d' % vol }}
+        {% elif control == 'bass' %}
+          {% set b = [[v, -6] | max, 6] | min %}
+          PSBAS {{ 50 + b }}
+        {% elif control == 'treble' %}
+          {% set t = [[v, -6] | max, 6] | min %}
+          PSTRE {{ 50 + t }}
+        {% elif control == 'subwoofer' %}
+          {% set s = [[v, -12] | max, 12] | min %}
+          PSSWL {{ 50 + s }}
+        {% endif %}
+
+  - if:
+      - condition: template
+        value_template: "{{ control in ['bass', 'treble'] }}"
+    then:
+      - action: denonavr.get_command
+        target:
+          entity_id: "{{ target_player }}"
+        data:
+          command: "/goform/formiPhoneAppDirect.xml?PSTONE%20CTRL%20ON"
+
+  - action: denonavr.get_command
+    target:
+      entity_id: "{{ target_player }}"
+    data:
+      command: "/goform/formiPhoneAppDirect.xml?{{ cmd | trim | replace(' ', '%20') }}"

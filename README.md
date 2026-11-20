@@ -1,224 +1,135 @@
-# Music Assistant Smart Dial · version 2
+# Music Assistant Smart Dial
 
-A round touchscreen dial on the bathroom wall. It browses and plays music from [Music Assistant](https://www.music-assistant.io/), and controls the volume, bass, treble and sub, without needing a phone. It's built on a Waveshare ESP32-S3 knob.
+A round touchscreen dial on the bathroom wall that plays my whole music library without a phone. Turn it to browse albums, tap to play, turn again for the volume. Swipe up for bass, treble and subwoofer. Speak to it and it finds a record.
 
-This page tells the story so far, from the speakers in the ceiling to the dial. The firmware and a video of the dial working will be added here next. **Click any image to open it full size.**
+It's a [Waveshare ESP32-S3 knob](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm) running my own firmware. It talks to [Music Assistant](https://www.music-assistant.io/) for the music and to [Home Assistant](https://www.home-assistant.io/) for the amplifier.
 
-> **Video coming soon.** The bathroom audio running, then the dial in action.
+[![The dial on a bathroom wall, playing, with album art and the play controls on its round screen](images/hero.jpg)](images/hero.jpg)
 
----
+*The dial is the real CAD model and the screen is a real capture from the dial. The bathroom around it is a render.*
 
-## The story at a glance
+<!-- VIDEO -->
 
-- **2024** · I wanted music in the bathroom that didn't sound awful
-- **May 2024** · Chose the ceiling speakers: Dali Phantom E80
-- **June 2024** · Ceiling finished, speakers in
-- **July 2024** · Tried two hi-fi subs. They couldn't keep up
-- **October 2024** · Built enclosures for the ceiling speakers
-- **May 2025** · Built a sub box from plywood
-- **June 2025** · Car subs fitted under the cabinet
-- **2025** · **Version 1:** Home Assistant controls the amps; a Tuya knob sets the volume
-- **Early 2026** · Looked for a better control: the Spotify Car Thing, then the Waveshare knob
-- **March 2026** · **Version 2:** designs in Figma, a web prototype, the same designs running on the knob, tested with five people
-- **Next** · The firmware and the dial in action, here
+▶ **[Play with the dial in your browser](https://sygad.github.io/music-assistant-smart-dial/demo/)**: the same screens, running the same code as the hardware.
+
+📖 **[Read the story](STORY.md)**: from the speakers in the ceiling to the dial on the wall.
 
 ---
 
-## 1. The problem
-
-I wanted to listen to music in the bathroom, and I didn't want it to sound awful. Small Bluetooth speakers weren't going to cut it.
-
-I looked at portable Bluetooth speakers and at much larger portable party speakers. Neither worked. They either took up too much space in a small bathroom or needed a constant power supply, and running mains power to a speaker in a bathroom isn't realistically achievable.
-
-So it had to be **speakers permanently mounted in the ceiling**.
-
-<br>
-
-## 2. The ceiling speakers (May to October 2024)
-
-I chose the **Dali Phantom E80**. They're among the largest ceiling speakers rated for humid rooms that don't cost an absolute fortune.
-
-[![A Dali Phantom E80 ceiling speaker beside its round grille](images/01-ceiling-speaker.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/01-ceiling-speaker.jpg "Open full size")
-
-[![The finished ceiling: two speakers with grilles, spotlights, the MVHR vent and a sensor](images/04-ceiling-finished.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/04-ceiling-finished.jpg "Open full size")
-
-*June 2024: the ceiling finished, with the two speakers among the spotlights, the MVHR vent and the motion sensor.*
-
-Above the ceiling, each speaker got its own enclosure, bolted between the joists.
-
-[![The speaker enclosure, seen from the loft side](images/02-speaker-enclosure.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/02-speaker-enclosure.jpg "Open full size")
-
-*October 2024: a speaker enclosure, seen from the loft side.*
-
-[![Both enclosures bolted between the joists, among the ventilation ducts](images/03-enclosures-on-joists.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/03-enclosures-on-joists.jpg "Open full size")
-
-*Both enclosures bolted to the joists, among the MVHR ducting.*
-
-<br>
-
-## 3. Finding the bass (July 2024 to June 2025)
-
-The ceiling speakers sounded great, but there was never going to be enough bass from them alone.
-
-I tried a couple of Yamaha hi-fi subs. They couldn't keep up with what the ceiling speakers were putting out.
-
-[![Two Yamaha hi-fi subs on the floor of the half-built bathroom](images/05-hifi-sub-trial.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/05-hifi-sub-trial.jpg "Open full size")
-
-*July 2024: the hi-fi subs on trial. Not loud enough.*
-
-I needed a more powerful sub, and the hard part was where to put it:
-
-- **Ceiling-mounted subs?** No. The ceiling was already busy: spotlights, the MVHR, the motion sensors and the speakers.
-- **Concealed in a wall?** Hard to do in a small bathroom.
-- **Space that wasn't being used?** ✅ The space under the cabinet was just large enough for **two 10-inch subwoofers**.
-
-Subs and an amp made for humid rooms would have cost far too much. So I looked at what I already had: a collection of old car stereo parts. Two Kenwood 10-inch car subs went into a plywood box built to fit under the cabinet.
-
-[![The plywood sub box under construction, with an internal divider](images/06-sub-box.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/06-sub-box.jpg "Open full size")
-
-*May 2025: the sub box.*
-
-[![The tall bathroom cabinet with the two subs in the space underneath](images/07-subs-under-cabinet-small.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/07-subs-under-cabinet.jpg "Open full size")
-
-*June 2025: the subs in the space under the bathroom cabinet.*
-
-[![Close-up of the two Kenwood subs under the cabinet](images/08-subs-close-up.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/08-subs-close-up.jpg "Open full size")
-
-*The two 10-inch Kenwood subs, up close.*
-
-<br>
-
-## 4. The amps (powering car parts from the mains)
-
-A car amp needs 12 volts, so I connected the Kenwood amp to a **12 V 30 A power supply** to see whether it could drive the subs at full volume. It could.
-
-[![The amp rack: the Kenwood car amp above the Denon receiver, with the WiiM Pro streamer on the top shelf](images/09-amp-rack.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/09-amp-rack.jpg "Open full size")
-
-*The rack: the Kenwood car amp above the Denon receiver, with the WiiM Pro on the top shelf.*
-
-- **Amplifier:** Denon AVR-X2000
-- **Ceiling speakers:** two Dali Phantom E80
-- **Sub amp:** Kenwood 1000 W Class D mono car amp, on a 12 V 30 A power supply
-- **Subs:** two Kenwood 10-inch car subs, 1000 W peak and 250 W RMS each, wired in parallel
-- **Streamer:** [WiiM Pro](https://www.wiimhome.com/wiimpro/overview)
-
-The subs have now been in the bathroom for over a year, through at least one winter, and they're holding up very well. The car amp and its power supply turned out to be a very cheap way to get a lot of bass.
-
-<br>
-
-## 5. Version 1: Home Assistant in control (2025)
-
-I wanted to know whether I could control the amps from Home Assistant and have one interface for the music.
-
-The Denon can be controlled over Telnet. I left it entirely to Claude and Home Assistant to work out how. I didn't write any of the code: I prompted and tested my way to the solution I have today. I asked for volume, bass, treble and sub control, and used [Mushroom](https://github.com/piitaya/lovelace-mushroom) sliders to drive the scripts and automations.
-
-[![The version 1 Home Assistant dashboard: now playing, then sliders for volume, treble, bass and sub](images/11-version-1-dashboard-small.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/11-version-1-dashboard.jpg "Open full size")
-
-*The version 1 dashboard in Home Assistant: what's playing, then sliders for volume, treble, bass and sub.*
-
-A **Tuya smart knob** on the wall does the everyday part. Turning it sets the volume. Pressing it turns the volume down and then switches off the smart plugs, which switch off the amps.
-
-[![The Tuya smart knob](images/10-tuya-knob-small.png)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/10-tuya-knob.jpg "Open full size")
-
-*The Tuya smart knob (product photo, shown for reference).*
-
-
-**How it all connects:**
-
-[![Version 1 signal path. Sound: phone over Bluetooth to the WiiM Pro, to the Denon, to the two ceiling speakers; the Denon's sub out goes to the Kenwood car amp, powered by a 12 V 30 A supply, which drives the two subs. Control: the Tuya knob talks to Home Assistant, which switches the smart plugs and sets the Denon's volume, bass, treble and sub over Telnet.](images/signal-path.png)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/signal-path.svg "Open full size")
-
-### What version 1 taught me
-
-As a proof of concept it works, and it works well. But playing music takes too many steps:
-
-1. Turn the music on from the Home Assistant dashboard. That powers up the amps and the WiiM Pro through the smart plugs.
-2. Connect my phone over Bluetooth.
-3. Choose the music on the phone and play it.
-
-The phone shouldn't be needed at all.
-
-<br>
-
-## 6. Looking for a successor (early 2026)
-
-I really liked the look of the **Spotify Car Thing**. A screen and a dial would have made an excellent successor. But it's [discontinued](https://en.wikipedia.org/wiki/Car_Thing), and making it do anything else takes considerable hacking.
-
-[![The Spotify Car Thing, a small screen with a dial, mounted in a car](images/12-spotify-car-thing.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/12-spotify-car-thing.jpg "Open full size")
-
-*The Spotify Car Thing (product photo, shown for reference).*
-
-Thankfully, Waveshare makes an ESP32 rotary dial with a round touchscreen: the [ESP32-S3-Knob-Touch-LCD-1.8](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm).
-
-[![The Waveshare ESP32-S3 knob with its round touchscreen](images/13-waveshare-knob-small.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/13-waveshare-knob.jpg "Open full size")
-
-*The Waveshare ESP32-S3 knob (product photo, shown for reference).*
-
-<br>
-
-## 7. Designing version 2 (March 2026)
-
-I designed some [early concepts in Figma](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=0-1) of what it might look like. Then I worked with Claude to find out whether those designs could actually run on the device.
-
-Yes, yes they can.
-
-[![Early Figma concept: a menu of Lights, Music, Switches and CCTV, each drilling down into its own screens](images/14-early-concept.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/14-early-concept.jpg "Open full size")
-
-*An early concept: one dial for lights, music, switches and CCTV. Version 2 focuses on music.*
-
-### The prototype
-
-An early interactive prototype explored the screens and how the dial and touch would work. It was built in the browser and on the knob itself at the same time: the browser version to try ideas quickly, the knob to check that the Figma designs really worked on the Waveshare hardware.
-
-[![The prototype in the browser: the round screen on Now Playing with an album cover and the volume arc, beside a panel of screens, a virtual rotary encoder, touch gestures and the current state](images/16-prototype.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/16-prototype.jpg "Open full size")
-
-*The prototype on Now Playing. The panel on the right stands in for the knob: jump to any screen, turn the encoder, swipe and tap.*
-
-▶ **[Try the prototype](https://sygad.github.io/rotary-dial-media-prototype/)**
-
-> This is **only a prototype**: the first version, made to see and validate whether the Figma designs could be used on the Waveshare device. The real dial is built separately.
-
-### Testing it with people
-
-I took five people I've worked with through it: firmware engineers, developers and designers, all with a keen interest in music and Home Assistant. They saw version 1, the full version 2 flow and the prototype.
-
-They really liked the idea, and they're looking forward to seeing the real thing in action.
-
-### The full flow
-
-Encouraged, I carried on designing with Claude to explore the full range of flows, micro-interactions and navigation.
-
-[![The full flow: every screen of the dial in six journeys (start and menu, albums, voice search, playlists, recent, music off) and the player, with arrows for what the person does](images/15-full-flow.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/15-full-flow.jpg "Open full size")
-
-*Every screen and how you get between them. Open it full size to read the notes under each screen.*
-
-▶ **[See the full flow in Figma](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=577-119)**
-
-### Try it in your browser
-
-The real dial's screens, running in your browser: the same code that runs on the knob, with a demo library of 226 albums and 5 playlists from my collection. Turn it with the outer ring, the scroll wheel or the arrow keys, and flick, swipe and tap on the screen. Playback is simulated.
-
-[![The dial in the browser, on an album with its play button](images/17-demo.jpg)](https://github.com/sygad/music-assistant-smart-dial-v2/raw/main/images/17-demo.jpg "Open full size")
-
-*The demo on an album, ready to play.*
-
-▶ **[Play with the dial](https://sygad.github.io/music-assistant-smart-dial-v2/demo/)** (live once this repo is public)
-
-<br>
-
-## 8. What's next
-
-- The firmware for the dial, here in this repo.
-- A video of the dial in action.
+## How this repo works
+
+The dial is made of eight parts. Each one has a number, and the number is used everywhere: in the table below, in the folder names, and in the title of each part's page. Every part's page has the same headings, so you can start at any of them.
+
+```
+README.md              this page
+BUILD-WITH-AI.md       hand the whole build to an AI assistant
+STORY.md               how it came about, with photos
+parts/
+  01-the-dial/         the Waveshare board: what's on it, the pins
+  02-wall-mount/       the 3D-printed mount and wedge (STL), and a CAD model of the dial (STEP)
+  03-screens/          every screen, and the Figma design system they're drawn from
+  04-firmware/         building it, your settings, flashing, updates over Wi-Fi
+  05-music-assistant/  what the dial asks Music Assistant for
+  06-home-assistant/   the helpers, scripts and automations that drive the amp
+  07-voice-search/     speech to text with the Whisper add-on
+  08-browser-demo/     the simulator: the dial's own code in a web page
+core/  ui/  firmware/  sim/  tests/  tools/  config/     the source
+home-assistant/        the Home Assistant YAML, ready to paste
+demo/                  the browser demo, as published
+```
+
+**Pick your route:**
+
+- **Have an AI build it for me** → [BUILD-WITH-AI.md](BUILD-WITH-AI.md)
+- **Build all of it myself** → [Quick start](#quick-start)
+- **Take just one part** → [The parts](#the-parts), then open that part's page
+- **Just look** → [Play with it in your browser](https://sygad.github.io/music-assistant-smart-dial/demo/)
 
 ---
 
-## Credits
+## The parts
 
-- **Photos of the build, the dashboard, the Figma designs and the prototype:** mine.
-- **Tuya smart knob, Spotify Car Thing, Waveshare knob:** product photos, shown for reference only. They belong to their makers.
-- **[Music Assistant](https://www.music-assistant.io/):** the music library and player behind version 2.
-- **[Mushroom](https://github.com/piitaya/lovelace-mushroom):** the sliders on the version 1 dashboard.
+1. **[The dial](parts/01-the-dial/README.md)**: a Waveshare ESP32-S3 with a 360 × 360 round touchscreen inside a turning ring, a microphone and a haptic motor. Stock hardware.
+2. **[The wall mount](parts/02-wall-mount/README.md)**: a printed bracket and a wedge that tilts the face up towards you.
+3. **[The screens and the design system](parts/03-screens/README.md)**: every screen the dial draws, designed in Figma first, with one token per job.
+4. **[The firmware](parts/04-firmware/README.md)**: C on ESP-IDF, drawn with LVGL. Builds with one command, updates itself over Wi-Fi.
+5. **[Music Assistant](parts/05-music-assistant/README.md)**: the library, the covers and the playing. The dial talks to it directly.
+6. **[Home Assistant](parts/06-home-assistant/README.md)**: powers the amps, and turns the dial's volume, bass, treble and subwoofer into Denon commands.
+7. **[Voice search](parts/07-voice-search/README.md)**: choose Search and speak. Home Assistant's Whisper add-on turns it into words.
+8. **[The browser demo](parts/08-browser-demo/README.md)**: the same screens compiled for the web, to try ideas without the hardware.
+
+[![The dial's menu, as captured from the dial](images/screen-menu-small.jpg)](images/screen-menu.jpg)
+
+*The menu, captured from the dial over USB. More on [the screens page](parts/03-screens/README.md).*
+
+---
+
+## What it does
+
+- **Albums by cover.** Turn the ring or flick the screen to go through the library, A to Z. Tap the letter at the top to jump a letter at a time.
+- **Now Playing.** Play, pause, swipe to change track, and hold back or forward to skip faster and faster. Turning the ring sets the volume, shown as an arc around the edge.
+- **A volume limit that asks.** The volume stops at 80% and asks before it goes louder.
+- **Tone controls.** Swipe up for treble, bass and subwoofer, set on the amplifier itself.
+- **Voice search.** Say an artist or an album, and pick from what it finds.
+- **Playlists and Recent**, straight from Music Assistant.
+- **Music off.** One item in the menu fades the volume, stops the stream and powers the amps down.
+- **Updates over Wi-Fi**, started from Home Assistant.
+
+---
+
+## What you need
+
+### Hardware
+
+- **[Waveshare ESP32-S3-Knob-Touch-LCD-1.8](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm)**: the dial. Used by every part.
+- **A USB-C data cable**: for the first flash and for power.
+- **A Denon AV receiver** controllable by Home Assistant's [Denon AVR integration](https://www.home-assistant.io/integrations/denonavr/). Mine is an AVR-X2000. Used by part 6.
+- **A streamer Music Assistant can play to**, wired into the Denon. Mine is a [WiiM Pro](https://www.wiimhome.com/wiimpro/overview). Used by parts 5 and 6.
+- **Smart plugs for the amps** (optional). Mine are Tasmota relays. Used by part 6 to power the amps on and off.
+- **A 3D printer** (optional). Used by part 2.
+
+### Software, with the versions this was built and tested on
+
+- **Home Assistant** 2026.11.2
+- **Music Assistant** 2.10.12 (the add-on)
+- **Whisper add-on** 3.6.1, for voice search
+- **ESP-IDF** 5.5
+- **LVGL** 9.5, fetched by the build
+- **Emscripten**, only for the browser demo
+
+---
+
+## Quick start
+
+1. **Home Assistant first.** Add the helpers, the blueprint, the scripts and the automations from `home-assistant/`, and change the entity ids marked `CHANGE`. → [Part 6](parts/06-home-assistant/README.md)
+2. **Your settings.** Copy `config/secrets.example` to `config/secrets.local` and fill in your Wi-Fi, your two tokens, your server addresses and your Music Assistant player. → [Part 4](parts/04-firmware/README.md#your-settings)
+3. **Build and flash.** Install ESP-IDF 5.5, plug the dial in, and run `tools/fw.sh flash`. → [Part 4](parts/04-firmware/README.md)
+4. **Voice search** (optional). Install the Whisper add-on. → [Part 7](parts/07-voice-search/README.md)
+5. **Mount it** (optional). Print the bracket and the wedge. → [Part 2](parts/02-wall-mount/README.md)
+
+---
+
+## Swap in your own
+
+Everything specific to my house is in two places:
+
+- **`config/secrets.local`** (yours, never committed): Wi-Fi, tokens, the Home Assistant, Music Assistant and Denon addresses, and the Music Assistant player id.
+- **`home-assistant/`**: the entity ids of the Denon, the streamer and the smart plugs. Search the folder for `CHANGE`.
+
+The helper names (`input_number.bathroom_amp_volume` and the rest) are what the firmware looks for. Keep them as they are, or change them in both `home-assistant/helpers.yaml` and `firmware/main/ha.c`.
+
+---
 
 ## Licence
 
-[MIT](LICENSE) for my own work here. The product photos and anything third-party keep their own licences.
+[MIT](LICENSE): use, copy and change anything here, for any purpose. Third-party libraries, the Inter typeface, album artwork and product photos keep their own licences.
+
+## Credits
+
+- **[Waveshare](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm)**: the board. Product photo shown for reference.
+- **[Espressif ESP-IDF](https://github.com/espressif/esp-idf)**, **[esp_new_jpeg](https://components.espressif.com/components/espressif/esp_new_jpeg)** and **[esp_lcd_st77916](https://components.espressif.com/components/espressif/esp_lcd_st77916)**: the framework, the cover decoder and the panel driver.
+- **[LVGL](https://lvgl.io/)**: draws every screen.
+- **[Inter](https://rsms.me/inter/)** by Rasmus Andersson, SIL Open Font License: the typeface (`ui/fonts/INTER-LICENSE.txt`).
+- **[Music Assistant](https://www.music-assistant.io/)**, **[Home Assistant](https://www.home-assistant.io/)** and its **[Whisper add-on](https://github.com/home-assistant/app-whisper)**.
+- **Album artwork** on the screen captures and in the demo belongs to the artists and labels. It's shown to demonstrate the dial, not redistributed for use.
+- **Everything else** (the firmware, the designs, the mount, the photos and the renders) is mine, built with [Claude](https://claude.com/claude-code). I designed and tested it; Claude wrote the code.

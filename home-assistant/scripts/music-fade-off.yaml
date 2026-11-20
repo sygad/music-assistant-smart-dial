@@ -1,0 +1,34 @@
+# Fades the volume down to 30, then turns the music helper off.
+# Home Assistant script for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new script in YAML mode. Search this file for CHANGE.
+alias: Music Fade Off
+mode: restart
+description: 'Fades the bathroom amp volume down to the 30 resting level, then turns the music helper off. Steps in whole units of 1 because the entire chain below this script is integer-only: input_number.bathroom_amp_volume has step 1, automation.bathroom_volume_slider truncates the value with | int, and the Denon AVR Audio Control blueprint sends an integer MV command. The previous version took 50 fixed 0.2s steps regardless of span, so a typical 21-unit fade sent 5 commands per second of which about 29 were duplicates after truncation - and because script.bathroom_amp_volume is mode restart, each new call aborted the previous one''s HTTP request mid-flight. That combination of duplicates, drops and cancelled requests is what made the fade jittery rather than smooth. Now it sends one command per real 1-unit change, spaced to fill roughly 10 seconds, so every command is distinct and each one has time to complete. step_delay is clamped between 0.35s and 1.0s: the floor stops a large drop
+  outrunning the amp, the ceiling stops a 1-unit drop sitting idle for 10 seconds.'
+sequence:
+- variables:
+    rest_vol: 30
+    start_vol: '{{ states(''input_number.bathroom_amp_volume'') | float(0) | round | int }}'
+    span: '{{ [ (start_vol | int) - rest_vol, 0 ] | max }}'
+    step_delay: '{{ [ [ 10.0 / (span | int), 0.35 ] | max, 1.0 ] | min if (span | int) > 0 else 0.35 }}'
+- if:
+  - condition: template
+    value_template: '{{ (span | int) > 0 }}'
+  then:
+  - repeat:
+      count: '{{ span | int }}'
+      sequence:
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.bathroom_amp_volume
+        data:
+          value: '{{ (start_vol | int) - repeat.index }}'
+      - delay: '{{ step_delay }}'
+- action: input_number.set_value
+  target:
+    entity_id: input_number.bathroom_amp_volume
+  data:
+    value: 30
+- action: input_boolean.turn_off
+  target:
+    entity_id: input_boolean.bathroom_music

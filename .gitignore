@@ -1,1 +1,19 @@
+# Your settings: Wi-Fi, tokens, addresses
+config/secrets.local
+
+# Build output
+build/
+firmware/build/
+firmware/managed_components/
+firmware/dependencies.lock
+firmware/sdkconfig
+firmware/sdkconfig.old
+sim/build/
+tests/build/
+
+# Your library, copied by tools/sim.sh data (album art isn't ours to publish)
+sim/data/
+firmware/test_assets/
+
 .DS_Store
+__pycache__/

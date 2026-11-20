@@ -1,0 +1,132 @@
+# Bathroom Music Knob: Waveshare ESP32-S3-Knob-Touch-LCD-1.8
+CONFIG_IDF_TARGET="esp32s3"
+
+# Flash: 16 MB, quad I/O at 80 MHz
+CONFIG_ESPTOOLPY_FLASHMODE_QIO=y
+CONFIG_ESPTOOLPY_FLASHFREQ_80M=y
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+
+# 8 MB octal PSRAM at 80 MHz. Large buffers (frame buffers, covers) go here.
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_MODE_OCT=y
+CONFIG_SPIRAM_SPEED_80M=y
+CONFIG_SPIRAM_USE_MALLOC=y
+# Nothing tries internal RAM first (was 512, and 4096 before that). Even at
+# 512 the voice screen's own labels and list rows took 27 KB of internal RAM,
+# and the recording then had none left to open a socket with: every search
+# said "Couldn't reach Home Assistant" (29 Oct 2026). Only what asks for
+# internal or DMA memory by name gets it now.
+CONFIG_SPIRAM_MALLOC_ALWAYSINTERNAL=0
+CONFIG_SPIRAM_TRY_ALLOCATE_WIFI_LWIP=y
+# Internal RAM for Wi-Fi itself (26 Oct 2026, voice search): 10 static receive
+# buffers instead of 16 (1.6 KB each), and the receive path's code out of
+# internal RAM (about 17 KB).
+CONFIG_ESP_WIFI_STATIC_RX_BUFFER_NUM=10
+# CONFIG_ESP_WIFI_RX_IRAM_OPT is not set
+# bigger TCP receive window: cover downloads over a weak link (26 Oct 2026)
+# A closed connection holds its control block for 2 x MSL, and at 60 s that is
+# two minutes each. Even with the covers now reusing their connection, a few
+# seconds is plenty on a home network, and it stops any churn filling the table
+# (29 Oct 2026).
+CONFIG_LWIP_TCP_MSL=5000
+CONFIG_LWIP_MAX_SOCKETS=16
+CONFIG_LWIP_TCP_WND_DEFAULT=32768
+CONFIG_LWIP_TCP_RECVMBOX_SIZE=32
+CONFIG_LWIP_WND_SCALE=y
+CONFIG_SPIRAM_MALLOC_RESERVE_INTERNAL=65536
+CONFIG_SPIRAM_FETCH_INSTRUCTIONS=y
+# Read-only data (the fonts above all) stays in flash and is read through the
+# cache, rather than being copied into PSRAM. Measured 28 Oct 2026: it hands
+# 650 KB of PSRAM back, which the lists need for their draw buffers, and costs
+# the menu about 6% (41.8 -> 39.1 fps on the drag).
+# CONFIG_SPIRAM_RODATA is not set
+
+# CPU and caches tuned for drawing
+CONFIG_ESP_DEFAULT_CPU_FREQ_MHZ_240=y
+CONFIG_COMPILER_OPTIMIZATION_PERF=y
+CONFIG_ESP32S3_DATA_CACHE_64KB=y
+CONFIG_ESP32S3_DATA_CACHE_LINE_64B=y
+CONFIG_ESP32S3_INSTRUCTION_CACHE_32KB=y
+CONFIG_FREERTOS_HZ=1000
+CONFIG_FREERTOS_TASK_CREATE_ALLOW_EXT_MEM=y
+CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
+
+# Power management, for the low-power state behind the clock (30 Oct 2026):
+# the processor is held at 240 MHz by a lock the whole time the knob is awake
+# and let go only when the screen goes off, so drawing is unaffected.
+CONFIG_PM_ENABLE=y
+
+# Light sleep, on since 4 Nov 2026. It was off because it takes the USB console
+# with it, and that was the right call on the bench and the wrong one on a wall:
+# measured on 3 Nov, the dial asleep with only the screen dark still lost 19% of
+# its battery an hour and was flat in five and a half hours, because the
+# processor never actually stopped.
+#
+# The console does not have to be given up for it. IDF watches the USB port for
+# start-of-frame packets and holds a no-light-sleep lock only while a host is
+# actually plugged in (USJ_NO_AUTO_LS_ON_CONNECTION), so one build behaves
+# correctly in both places: cabled to the Mac the console works and light sleep
+# stays out of the way, and screwed to the wall with no cable the lock is
+# dropped within a few ticks and the processor sleeps. A console left watching a
+# sleeping dial goes quiet until something wakes it, which is the only cost.
+#
+# Automatic light sleep is entered from the idle task, so tickless idle is what
+# actually makes it happen - without it the rest of this does nothing.
+CONFIG_FREERTOS_USE_TICKLESS_IDLE=y
+CONFIG_USJ_NO_AUTO_LS_ON_CONNECTION=y
+# Sleep and wake code out of flash, so the short sleeps between a touch poll
+# and the next are not spent getting into and out of sleep.
+CONFIG_PM_SLP_IRAM_OPT=y
+CONFIG_PM_RTOS_IDLE_OPT=y
+CONFIG_ESP_WIFI_SLP_IRAM_OPT=y
+# PM_SLP_DISABLE_GPIO comes on with light sleep and is left on. It looks like a
+# power tweak - it isolates every pin during sleep, worth 200-300 uA - but IDF
+# selects it for ESP_SLEEP_GPIO_RESET_WORKAROUND, which is an S3 erratum: an
+# input-only pin left floating through light sleep can RESET the chip on a
+# static pulse. A dial on a wall that restarts by itself is the one failure
+# this project has already chased once with nothing to show for it, so the
+# workaround stays. The pins that cannot be floated - the touch chip's reset,
+# the backlight, the I2C pair and the two knob lines - are excluded one by one
+# in the board drivers with gpio_sleep_sel_dis().
+
+# Logs over the USB-C port (native USB Serial/JTAG)
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+
+# LVGL 9
+CONFIG_LV_COLOR_DEPTH_16=y
+CONFIG_LV_DEF_REFR_PERIOD=15
+CONFIG_LV_DPI_DEF=160
+CONFIG_LV_USE_CLIB_MALLOC=y
+CONFIG_LV_USE_CLIB_STRING=y
+CONFIG_LV_USE_CLIB_SPRINTF=y
+# Keep LVGL code out of internal RAM: Wi-Fi needs that memory (26 Oct 2026)
+CONFIG_LV_ATTRIBUTE_FAST_MEM_USE_IRAM=n
+CONFIG_LV_USE_LOG=y
+CONFIG_LV_LOG_LEVEL_WARN=y
+CONFIG_LV_LOG_PRINTF=y
+CONFIG_LV_USE_FLOAT=y
+CONFIG_LV_USE_SNAPSHOT=y
+CONFIG_LV_FONT_MONTSERRAT_14=y
+CONFIG_LV_USE_THEME_DEFAULT=n
+CONFIG_LV_BUILD_EXAMPLES=n
+CONFIG_LV_BUILD_DEMOS=n
+
+# Over-the-air updates (2 Nov 2026). The knob is on the bathroom wall, so a
+# build that cannot be recovered from over Wi-Fi means taking it down. Rollback
+# makes that nearly impossible: a freshly written slot boots as "pending
+# verify" and is only marked good once the knob has Wi-Fi again (ota.c), so a
+# build that crashes, hangs or cannot reach the network is put back by the
+# bootloader instead of leaving a dead dial on the wall.
+CONFIG_BOOTLOADER_APP_ROLLBACK_ENABLE=y
+
+# Memory as something the dial reports on (6 Nov 2026, docs/MEMORY.md).
+# The trace facility is what lets the `memmap` console command list every task,
+# where its stack lives and how near the end of it it has come (8 bytes a task).
+CONFIG_FREERTOS_USE_TRACE_FACILITY=y
+# Lets a static variable be placed in PSRAM with EXT_RAM_BSS_ATTR. Internal RAM
+# is the dial's scarce memory, and buffers that nothing touches with the cache
+# off - lists, histories, the instrument's own tables - have no reason to be in
+# it.
+CONFIG_SPIRAM_ALLOW_BSS_SEG_EXTERNAL_MEMORY=y

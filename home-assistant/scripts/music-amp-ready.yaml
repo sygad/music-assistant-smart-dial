@@ -1,0 +1,43 @@
+# After switch-on: waits for the amp to answer, picks the input, sets the starting volume.
+# Home Assistant script for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new script in YAML mode. Search this file for CHANGE.
+# CHANGE: these also appear inside templates below: switch.attic_storage_swb1_denon_amp
+alias: Music Amp Ready
+mode: restart
+description: 'Waits for the Denon to come online after the bathroom music helper is switched on, then sets the volume to the 30 starting level. This wait used to live inside the on-branch of automation.bathroom_music_fade_off, and because that automation is mode: single, the run held the automation busy for as long as the amp took to appear - 43 seconds on 1 Nov 2026. A Music off arriving in that window was dropped as failed_single: no fade, no power-down, and the knob''s next touch switched the helper straight back on, so Darren had to ask for Music off twice. Waiting out here instead means the automation''s on-branch finishes in milliseconds and an off is never dropped. Mode restart: a second switch-on while this is still waiting replaces it rather than stacking. The off-branch calls script.turn_off on this script before it starts its fade, and the state condition below is the backstop for the moment between the wait ending and the volume being set: without it a cancelled-too-late run
+  would push 30 at an amp that is being powered off, and the Denon would remember that volume for next time. 2 Nov 2026: it also asserts the amp''s input (SAT/CBL, the streamer''s) before the volume, because playing to the Denon directly through Music Assistant steals the input and the amp never gives it back. 2 Nov 2026, later: the 30 was briefly replaced with a fade up to a 71 starting level, on a misreading of why the bathroom was too quiet. The quiet was never this script - the denonavr integration had wedged and no volume command was reaching the amp, which sat at 30 while the dial and the slider both said 71. 30 is the level the music is meant to start at and be wound up from; it is deliberate and must not be raised. 2 Nov 2026, later still: a 130 second wait now sits in front of everything. The Denon serves no HTTP for the first two minutes after its mains comes on, so the wait on the entity was not waiting for anything real - see the note on that step. 10 Nov 2026: the 30 is now
+  sent only if the helper has not been turned since the amp''s mains came on. Darren set the volume during the 150 second wait on a cold start at 08:34, and when the wait ran out at 08:35:51 this script stamped 30 over it - the volume fell about a minute after he had set it and he had to get out of the shower to put it back. The hand wins now: if the helper has moved during the wait, that value goes to the amp instead of 30, which is also exactly the resend it needs, because every turn made inside the deaf window was lost. The 30 starting level is untouched for a switch-on nobody has touched. 10 Nov 2026, later: the two waits in front of everything are now one wait on sensor.bathroom_dial_amp, the dial''s own probe of the amp. The blind count was not only overwriting Darren''s volume, it was the reason a switch-on took minutes to come good: on the morning of 10 Nov the amp answered at 56 seconds and the script sat there until 151, holding the input assertion with it, so the amp could be
+  left on the wrong input with the streamer playing into nothing for two minutes. Measured waiting replaces assumed waiting. The 150 stays as the ceiling only, for a dial that is asleep or not reporting.'
+sequence:
+- variables:
+    volume_at_switch_on: '{{ states(''input_number.bathroom_amp_volume'') | float(30) | round(0) | int }}'
+  note: Remembered before the deaf wait so the steps at the end can tell a hand turn made during the wait from a helper nobody has touched. Captured here rather than after the wait because the whole point is to notice turns made while the amp could not hear them.
+- wait_template: '{{ is_state(''sensor.bathroom_dial_amp'', ''ready'') }}'
+  timeout: '{% set on_for = (now() - states.switch.attic_storage_swb1_denon_amp.last_changed).total_seconds() %}{{ [150 - on_for, 1] | max | round(0) }}'
+  continue_on_timeout: true
+  note: 'Wait until the amp actually answers, and no longer. sensor.bathroom_dial_amp is the dial''s own probe: one GET on the Denon''s status page every two seconds, reported here as connecting / ready / unknown. It is the only honest answer in the house - Home Assistant''s own media_player went ''on'' four seconds after the mains came back through a 31 second power cycle while the amp was still a minute and a half from serving anything, and the two waits this step replaces were built around that lie: an entity wait that passed instantly and then a flat count to 150 seconds that checked nothing at all. The timeout is still measured from the mains switch so the count is the same ceiling as before, and continue_on_timeout keeps the old behaviour underneath: a dial that is asleep, flat or newly flashed leaves this sensor saying nothing, and then the script waits out the ceiling and carries on exactly as it used to. Floored at one second rather than nought: a switch-on against an amp that has
+    been up for ages renders 150 - on_for as a negative, and a zero timeout is not documented as an instant fall-through - it may well mean no timeout at all, which would be a script hung for the rest of the day on a wedged amp. One second costs nothing and is certain.'
+- condition: state
+  entity_id: input_boolean.bathroom_music
+  state: 'on'
+  note: 'the music was turned off while we waited: leave the volume alone'
+- action: denonavr.get_command
+  target:
+    entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+  data:
+    command: /goform/formiPhoneAppDirect.xml?SISAT/CBL
+  continue_on_error: true
+  note: 'The input the Bathroom Streamer is wired to. Asserted on every switch-on because the amp does not keep it: anything that plays to the Denon directly through Music Assistant (media_player.bathroom_denon_amp_ma) makes it jump to its own NETWORK input, and it stays there. That happened at 16:53 on 1 Nov 2026 and the bathroom was silent from then until 2 Nov - the streamer was playing, the amp was on and at volume 71, and the amp was listening to its own empty network input. SAT/CBL is not in the integration''s source_list (which offers NET alone), so this goes as a raw Denon command rather than media_player.select_source. continue_on_error: a wedged amp must still get its starting volume.'
+- variables:
+    start_volume: '{% set now_v = states(''input_number.bathroom_amp_volume'') | float(30) | round(0) | int %}{{ now_v if now_v != volume_at_switch_on else 30 }}'
+  note: 'What to start at: 30 if the helper has not moved since the mains came on, otherwise whatever it now reads. A turn made during the wait is deliberate and was never heard by the amp, so it is both honoured and resent.'
+- action: input_number.set_value
+  target:
+    entity_id: input_number.bathroom_amp_volume
+  data:
+    value: '{{ start_volume }}'
+- action: script.bathroom_amp_volume
+  data:
+    value: '{{ start_volume }}'
+  continue_on_error: true
+  note: And send the starting volume to the amp itself, not only to the helper. Setting a helper that already reads the same number changes nothing, so automation.bathroom_volume_slider never fires and the amp is left wherever it happened to be - seen on 2 Nov 2026, helper 30 and amp 41 after a switch-on, with nothing in the chain to reconcile them. The helper is still set above, because that is what the dial and the dashboard read; this is what actually reaches the amp, and after a cold start it is the only thing that does, since everything sent during the deaf wait was lost.

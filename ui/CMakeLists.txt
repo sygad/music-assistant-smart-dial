@@ -1,0 +1,72 @@
+# ui: LVGL screens, shared by the firmware and the Mac simulator.
+set(UI_SRCS
+    ${CMAKE_CURRENT_LIST_DIR}/ui.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_menu.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_strip.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_albums.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_nowplaying.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_overlay.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_bench.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_haptics.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_eq.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_clock.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_search.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_list.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_playlists.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_ask.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_recent.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_settings.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_status.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_update.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_net.c
+    ${CMAKE_CURRENT_LIST_DIR}/ui_logo.c
+    ${CMAKE_CURRENT_LIST_DIR}/assets/img_treble.c
+    ${CMAKE_CURRENT_LIST_DIR}/assets/img_bass.c
+    ${CMAKE_CURRENT_LIST_DIR}/assets/img_subs.c
+    ${CMAKE_CURRENT_LIST_DIR}/assets/img_trident.c
+    ${CMAKE_CURRENT_LIST_DIR}/assets/img_back.c
+    ${CMAKE_CURRENT_LIST_DIR}/assets/img_bolt.c
+    ${CMAKE_CURRENT_LIST_DIR}/assets/img_tick.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_19.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_20.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_21.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_22.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_23.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_24.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_25.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_26.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_27.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_28.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_29.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_30.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_31.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_32.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_33.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_34.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_35.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_light_36.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_10.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_11.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_12.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_13.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_14.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_15.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_16.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_17.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_19.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_20.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_21.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_22.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_23.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_24.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_26.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_regular_18.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_extralight_96.c
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/font_inter_extralight_160.c)
+if(ESP_PLATFORM)
+    idf_component_register(SRCS ${UI_SRCS} INCLUDE_DIRS "." REQUIRES core)
+else()
+    add_library(ui STATIC ${UI_SRCS})
+    target_include_directories(ui PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+    target_link_libraries(ui PUBLIC core lvgl)
+endif()

@@ -1,0 +1,52 @@
+# Resends the volume if the amp and the helper disagree for 30 seconds.
+# Home Assistant automation for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new automation in YAML mode. Search this file for CHANGE.
+# CHANGE: these also appear inside templates below: media_player.bathroom_denon_amp
+id: '1793620750717'
+alias: Amp Volume Disagreement
+description: |-
+  Catches the fault Amp Connection Recovery cannot see: the denonavr integration wedged while the amp entity still reads 'on'. On 2 Nov 2026 the dial and the dashboard slider agreed on 71, every volume command was accepted by Home Assistant, each took 20 seconds, and none reached the amp, which sat at 30 throughout. Nothing was unavailable, so Amp Connection Recovery never fired. Reading the amp directly showed it answering in 17 ms, so the integration was the whole fault.
+
+  REWRITTEN THE SAME DAY, after this automation became the fault itself. As first written it asked only that the amp and the helper disagree by more than 2 for 30 seconds. While a hand is turning the dial that is ALWAYS true - the integration reads the amp every 10 seconds, so its idea of the volume is permanently behind the hand - and Darren fiddling with the volume for half a minute looked exactly like a wedged integration. It fired at 15:00:51 while he was turning, could not see its re-send land because he was still turning, and reloaded the config entry, which took the amp away. 'I'm turning the volume up and nothing's happening' was this automation doing it.
+
+  Two changes. The trigger now also requires the helper to have been untouched for 15 seconds, so the 30 second clock only runs when nobody is touching anything - 45 seconds of stillness with a persistent disagreement, which a hand cannot produce. And the integration reload is gone. It was the destructive part, it is what turned a false positive into a broken amp, and the fault it addressed is rare enough to be worth a notification and a human rather than an automatic reload. What is left re-sends the volume, which is harmless even when wrong, and tells Darren if that does not land. Amp Connection Recovery still reloads the integration for the case it was written for, the amp going unavailable.
+triggers:
+- trigger: template
+  value_template: '{% set amp = states(''media_player.bathroom_denon_amp'') %}{% set lvl = state_attr(''media_player.bathroom_denon_amp'',''volume_level'') %}{% set still = (now() - states.input_number.bathroom_amp_volume.last_changed).total_seconds() %}{{ amp == ''on'' and lvl is not none and is_state(''input_boolean.bathroom_music'',''on'') and still > 15 and (((lvl | float * 100) | round) - (states(''input_number.bathroom_amp_volume'') | float(0) | round | int)) | abs > 2 }}'
+  for: 00:00:30
+  note: 'volume_level is (MV + 80) / 100 on the denonavr integration, not a fraction of the 0-98 maximum, so it is multiplied by 100 to reach the Denon scale the helper is in. The 15 second stillness is the part that matters: while the volume is being moved the amp''s reading is behind the hand and a disagreement means nothing.'
+conditions:
+- condition: state
+  entity_id: input_boolean.bathroom_music
+  state: 'on'
+  note: 'the music went off while the 30 seconds ran: the amp is being faded and powered down, and a disagreement is expected then'
+- condition: template
+  value_template: '{{ (now() - states.input_number.bathroom_amp_volume.last_changed).total_seconds() > 15 }}'
+  note: 'the same stillness test again at the moment of firing: now() makes the trigger template re-render only once a minute, so a hand that started turning inside that minute must still be caught here'
+- condition: template
+  value_template: '{{ this.attributes.last_triggered is none or (now() - this.attributes.last_triggered).total_seconds() > 300 }}'
+  note: five minute cooldown, read off the previous run - last_triggered is captured before this run stamps it
+actions:
+- action: script.bathroom_amp_volume
+  data:
+    value: '{{ states(''input_number.bathroom_amp_volume'') | float(0) | round | int }}'
+  note: a dropped command is the cheap explanation, and re-sending the volume the helper already holds is harmless even if this automation has misread the situation
+- wait_template: '{% set lvl = state_attr(''media_player.bathroom_denon_amp'',''volume_level'') %}{{ lvl is not none and (((lvl | float * 100) | round) - (states(''input_number.bathroom_amp_volume'') | float(0) | round | int)) | abs <= 2 }}'
+  timeout: 00:00:25
+  continue_on_timeout: true
+  note: 25 seconds covers two of the integration's 10 second polls, so a command that did land has been seen to land
+- if:
+  - condition: template
+    value_template: '{{ not wait.completed }}'
+  then:
+  - action: persistent_notification.create
+    data:
+      notification_id: bathroom_amp_volume_stuck
+      title: Bathroom amp is not taking volume commands
+      message: The bathroom Denon amp reports a different volume from the slider and the dial, and re-sending it did not land. The dial and the slider will look right while the amp stays where it is. Reloading the denonavr integration has fixed this before - it is deliberately not done automatically any more, because doing so during ordinary use took the amp away mid-turn.
+    note: 'a notification, not a reload: see the description'
+  else:
+  - action: persistent_notification.dismiss
+    data:
+      notification_id: bathroom_amp_volume_stuck
+mode: single

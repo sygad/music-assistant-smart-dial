@@ -1,0 +1,46 @@
+# The helpers the dial reads and writes. Explained in parts/06-home-assistant/README.md.
+# Add them under these keys in configuration.yaml, or make the same ones in Settings > Devices & services > Helpers.
+# The entity ids are the ones the firmware uses (firmware/main/ha.c). Keep them, or change both.
+input_number:
+  bathroom_amp_volume:
+    name: Amp Volume
+    min: 0
+    max: 98
+    step: 1
+    mode: slider
+    icon: mdi:volume-high
+  bathroom_amp_bass:
+    name: Amp Bass
+    min: -6
+    max: 6
+    step: 1
+    mode: slider
+    icon: mdi:music-clef-bass
+  bathroom_amp_treble:
+    name: Amp Treble
+    min: -6
+    max: 6
+    step: 1
+    mode: slider
+    icon: mdi:music-clef-treble
+  bathroom_amp_subwoofer:
+    name: Amp Subwoofer
+    min: -12
+    max: 12
+    step: 1
+    mode: slider
+    icon: mdi:speaker
+input_boolean:
+  bathroom_music:
+    name: Music
+    icon: mdi:music
+  bathroom_dial_update:
+    name: Dial Update
+    icon: mdi:cloud-download
+input_text:
+  bathroom_dial_firmware_url:
+    name: Dial Firmware URL
+    icon: mdi:link-variant
+    min: 0
+    max: 255
+    mode: text

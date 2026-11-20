@@ -1,0 +1,28 @@
+# Optional: turns the music off after the room has been empty for 20 minutes.
+# Home Assistant automation for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
+# Paste it into a new automation in YAML mode. Search this file for CHANGE.
+id: '1793226908569'
+alias: Music Auto Off
+description: 'Turns the bathroom music off after the room has been empty for 20 minutes, for the times the amps get left running - on 28 Oct 2026 both amps sat powered for 12 hours with nothing playing. Uses the occupancy.cleared trigger against the Bathroom area with behavior: all, so it fires only once BOTH bathroom occupancy sensors have been clear for the full 20 minutes, and it follows area membership if a sensor is ever added or swapped rather than hard-coding an entity list. The trigger leaves unavailable sensors out of the count itself. Measured over 24 hours to 28 Oct 2026 those two sensors went unavailable only once (a single cluster around 13:02-13:06, all under 40 seconds), so blips resetting the 20 minute clock is rare; an HA restart does reset it, which at worst delays the switch-off by 20 minutes. It turns the music helper off and then explicitly triggers Music Fade Off, because that automation deliberately ignores helper changes made by other automations - its parent_id guard,
+  which stops its own mid-fade turn-on retriggering it. Triggering it directly runs the same fade and power-down path the dashboard toggle uses, so the fade and the switch-off exist in only one place.'
+triggers:
+- trigger: occupancy.cleared
+  target:
+    area_id: bathroom  # CHANGE: the area whose occupancy turns the music off
+  options:
+    behavior: all
+    for: 00:20:00
+conditions:
+- condition: state
+  entity_id: input_boolean.bathroom_music
+  state: 'on'
+actions:
+- action: input_boolean.turn_off
+  target:
+    entity_id: input_boolean.bathroom_music
+- action: automation.trigger
+  target:
+    entity_id: automation.bathroom_music_fade_off
+  data:
+    skip_condition: true
+mode: single
