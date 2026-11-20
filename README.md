@@ -14,6 +14,8 @@ It's a [Waveshare ESP32-S3 knob](https://www.waveshare.com/esp32-s3-knob-touch-l
 
 ▶ **[Play with the dial in your browser](https://sygad.github.io/music-assistant-smart-dial/demo/)**: the same screens, running the same code as the hardware.
 
+🎨 **[Open the design in Figma](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179)**: every screen, colour, size and part, in a public Figma file anyone can open.
+
 📖 **[Read the story](STORY.md)**: from the speakers in the ceiling to the dial on the wall.
 
 ---
@@ -29,7 +31,7 @@ STORY.md               how it came about, with photos
 parts/
   01-the-dial/         the Waveshare board: what's on it, the pins, and its 3D model (Fusion, STEP, STL)
   02-wall-mount/       the 3D-printed bracket and wedge (STL to print, Fusion and STEP to change)
-  03-screens/          every screen, and the Figma design system they're drawn from
+  03-screens/          every screen, and the public Figma file they're drawn from
   04-firmware/         building it, your settings, flashing, updates over Wi-Fi
   05-music-assistant/  what the dial asks Music Assistant for
   06-home-assistant/   the helpers, scripts and automations that drive the amp
@@ -44,6 +46,7 @@ demo/                  the browser demo, as published
 
 - **Have an AI build it for me** → [BUILD-WITH-AI.md](BUILD-WITH-AI.md)
 - **Build all of it myself** → [Quick start](#quick-start)
+- **Change how it looks** → [the Figma file](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179), then [part 3](parts/03-screens/README.md)
 - **Take just one part** → [The parts](#the-parts), then open that part's page
 
 ---

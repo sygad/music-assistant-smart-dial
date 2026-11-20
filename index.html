@@ -220,7 +220,7 @@ footer { margin-top: 96px; padding-top: 24px; border-top: 1px solid var(--line);
 <p>Thankfully, Waveshare makes an ESP32 rotary dial with a round touchscreen: the <a href="https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm" target="_blank" rel="noopener">ESP32-S3-Knob-Touch-LCD-1.8</a>.</p>
 <figure><a class="zoom" href="images/13-waveshare-knob.jpg"><img src="images/13-waveshare-knob-small.jpg" alt="The Waveshare ESP32-S3 knob with its round touchscreen"></a><figcaption>The Waveshare ESP32-S3 knob (product photo, shown for reference).</figcaption></figure>
 <h2><span class="num">7</span><span>Designing version 2</span><span class="when">March 2026</span></h2>
-<p>I designed some <a href="https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=0-1" target="_blank" rel="noopener">early concepts in Figma</a> of what it might look like. Then I worked with Claude to find out whether those designs could actually run on the device.</p>
+<p>I designed some <a href="https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=0-1" target="_blank" rel="noopener">early concepts in Figma</a> of what it might look like. Then I worked with Claude to find out whether those designs could actually run on the device.</p>
 <p>Yes, yes they can.</p>
 <figure><a class="zoom" href="images/14-early-concept.jpg"><img src="images/14-early-concept.jpg" alt="Early Figma concept: a menu of Lights, Music, Switches and CCTV, each drilling down into its own screens"></a><figcaption>An early concept: one dial for lights, music, switches and CCTV. Version 2 focuses on music.</figcaption></figure>
 <h3>The prototype</h3>
@@ -236,7 +236,10 @@ footer { margin-top: 96px; padding-top: 24px; border-top: 1px solid var(--line);
 <h3>The full flow</h3>
 <p>Encouraged, I carried on designing with Claude to explore the full range of flows, micro-interactions and navigation.</p>
 <figure><a class="zoom" href="images/15-full-flow.jpg"><img src="images/15-full-flow.jpg" alt="The full flow: every screen of the dial in six journeys (start and menu, albums, voice search, playlists, recent, music off) and the player, with arrows for what the person does"></a><figcaption>Every screen and how you get between them. Open it full size to read the notes under each screen.</figcaption></figure>
-<p>▶ <strong><a href="https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=577-119" target="_blank" rel="noopener">See the full flow in Figma</a></strong></p>
+<p>▶ <strong><a href="https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=577-119" target="_blank" rel="noopener">See the full flow in Figma</a></strong></p>
+<h3>The design system</h3>
+<p>Once the flows worked, the design became the master copy. I rebuilt every screen in Figma from a single set of colours, sizes and parts, one token per job. Then the firmware was changed until it matched the design, not the other way round. The finished file is public: all 60 screens, the 95 variables, and the earlier concepts and flows that led to it.</p>
+<p>▶ <strong><a href="https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179" target="_blank" rel="noopener">Open the design in Figma</a></strong> · more in <a href="https://github.com/sygad/music-assistant-smart-dial/blob/main/parts/03-screens/README.md" target="_blank" rel="noopener">part 3, the screens</a></p>
 <h3>Try it in your browser</h3>
 <p>The real dial's screens, running in your browser: the same code that runs on the knob, with a demo library of 226 albums and 5 playlists from my collection. Turn it with the outer ring, the scroll wheel or the arrow keys, and flick, swipe and tap on the screen. Playback is simulated.</p>
 <figure><a class="zoom" href="images/17-demo.jpg"><img src="images/17-demo.jpg" alt="The dial in the browser, on an album with its play button"></a><figcaption>The demo on an album, ready to play.</figcaption></figure>

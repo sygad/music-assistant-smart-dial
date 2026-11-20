@@ -155,7 +155,7 @@ Thankfully, Waveshare makes an ESP32 rotary dial with a round touchscreen: the [
 
 ## 7. Designing version 2 (March 2026)
 
-I designed some [early concepts in Figma](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=0-1) of what it might look like. Then I worked with Claude to find out whether those designs could actually run on the device.
+I designed some [early concepts in Figma](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=0-1) of what it might look like. Then I worked with Claude to find out whether those designs could actually run on the device.
 
 Yes, yes they can.
 
@@ -189,7 +189,13 @@ Encouraged, I carried on designing with Claude to explore the full range of flow
 
 *Every screen and how you get between them. Open it full size to read the notes under each screen.*
 
-▶ **[See the full flow in Figma](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=577-119)**
+▶ **[See the full flow in Figma](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=577-119)**
+
+### The design system
+
+Once the flows worked, the design became the master copy. I rebuilt every screen in Figma from a single set of colours, sizes and parts, one token per job. Then the firmware was changed until it matched the design, not the other way round. The finished file is public: all 60 screens, the 95 variables, and the earlier concepts and flows that led to it.
+
+▶ **[Open the design in Figma](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179)** · more in [part 3, the screens](https://github.com/sygad/music-assistant-smart-dial/blob/main/parts/03-screens/README.md)
 
 ### Try it in your browser
 

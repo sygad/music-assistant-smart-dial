@@ -8,12 +8,22 @@
 
 Every screen was designed in Figma before it was built, and the design stays the master copy: when the two disagree, the firmware changes to match. The Figma file holds all 60 screens the dial can draw, built from one set of colours, sizes and parts.
 
-▶ **[Open the design file in Figma](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=862-179)** · **[See every screen in its journey](https://www.figma.com/design/jAaJDrPIrLTzMMPcqeqG4U/Rotary-Dial-Media?node-id=882-119)**
+▶ **[Open the design file in Figma](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179)** · **[See every screen in its journey](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=882-119)**
+
+## The Figma file
+
+The whole design is in a public Figma file. You don't need an account to look round it: open the link and zoom in on any screen.
+
+- **Components:** all 60 screens, grouped by journey, then the design system they're built from: colour, typography, shape, atoms, molecules and components. Each of the 95 variables says what the dial draws with it and where in `ui/` that happens.
+- **Flows:** each journey as a column, every screen in order with its parts named.
+- **The earlier pages:** Concept, Logo Design, Video Animation Scrapbook, Simplified Design for AI Starting Point, and the two older versions of the flows. They show how it got here. Only Components and Flows are kept up to date.
+
+**To make your own copy,** sign in to Figma (a free account works), open the file, and choose **Duplicate to your drafts** from the menu on the file's name. **File › Save local copy** gives you a `.fig` file instead.
 
 ## At a glance
 
 - **Built from:** [LVGL](https://lvgl.io/) 9.5, in `ui/`, one C file per screen
-- **Designed in:** Figma, file *Rotary Dial Media*. Two pages are the design system: **Components** (every screen and every part) and **Flows** (each screen in order, with its parts named)
+- **Designed in:** Figma, in the public file *[Rotary Dial Media (Public)](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179)*. Two pages are the design system: **Components** (every screen and every part) and **Flows** (each screen in order, with its parts named)
 - **Typeface:** [Inter](https://rsms.me/inter/), converted to bitmap fonts by `tools/fonts.sh`
 - **Icons:** exported from Figma and turned into the alpha masks in `ui/assets/` by `tools/png_to_c.py`. The bolt and the tick are drawn by `tools/bolt_icon.py` and `tools/tick_icon.py`
 - **Files for this part:** `ui/` (the screens), `core/` (the screen flow, gestures and timings, unit-tested in `tests/`)
