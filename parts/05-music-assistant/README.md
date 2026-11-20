@@ -1,8 +1,8 @@
-[← Part 4](../04-firmware/README.md) · [All parts](../../README.md#the-parts) · [Part 6 →](../06-home-assistant/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · **5 · Music Assistant** · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)
 
 # Part 5 · Music Assistant
 
-[![Album browse on the dial](../../images/screen-albums-small.jpg)](../../images/screen-albums.jpg)
+[![Album browse on the dial](../../images/screen-albums-small.png)](../../images/screen-albums.png)
 
 *The library, as the dial shows it.*
 
@@ -37,4 +37,4 @@ The dial talks to [Music Assistant](https://www.music-assistant.io/) directly, n
 
 ---
 
-[← Part 4](../04-firmware/README.md) · [All parts](../../README.md#the-parts) · [Part 6 →](../06-home-assistant/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · **5 · Music Assistant** · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)

@@ -1,4 +1,4 @@
-[← Part 2](../02-wall-mount/README.md) · [All parts](../../README.md#the-parts) · [Part 4 →](../04-firmware/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · **3 · Screens** · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)
 
 # Part 3 · The screens and the design system
 
@@ -20,33 +20,41 @@ Every screen was designed in Figma before it was built, and the design stays the
 
 ## The screens
 
-Captured from the dial itself over USB, then shown in a render of the dial. Click any of them for full size.
+Exported from the Figma design system, which the firmware is checked against. Click any of them for full size.
 
-[![The menu](../../images/screen-menu-small.jpg)](../../images/screen-menu.jpg)
+[![The menu](../../images/screen-menu-small.png)](../../images/screen-menu.png)
 
 *The menu. The row in the middle is the one you're on; the rows above and below shrink and fade towards the edge.*
 
-[![Album browse, on 10 Days Off - Vol 6, with the letter badge at the top](../../images/screen-albums-small.jpg)](../../images/screen-albums.jpg)
+[![Album browse, on Purple Rain, with the letter badge at the top](../../images/screen-albums-small.png)](../../images/screen-albums.png)
 
 *Albums, by cover. The badge at the top is the letter you're on; tap it to jump a letter at a time.*
 
-[![The tone controls over the album art: treble, bass and subwoofer](../../images/screen-eq-over-art-small.jpg)](../../images/screen-eq-over-art.jpg)
+[![The trident menu over the album art: treble, bass and subwoofer](../../images/screen-trident-small.png)](../../images/screen-trident.png)
 
-*Swipe up on Now Playing for the tone controls: treble, bass and subwoofer.*
+*The trident menu. Swipe up on Now Playing for the tone controls: treble, bass and subwoofer.*
 
-[![Playlists](../../images/screen-playlists-small.jpg)](../../images/screen-playlists.jpg)
+[![Now Playing: the time, the transport bar and the yellow volume arc](../../images/screen-nowplaying-small.png)](../../images/screen-nowplaying.png)
+
+*Now Playing while a track plays: the time at the top, the transport bar, and the volume arc round the edge.*
+
+[![The volume, at 48](../../images/screen-volume-small.png)](../../images/screen-volume.png)
+
+*Turning the ring sets the volume. The number shows in the pill at the top.*
+
+[![Playlists](../../images/screen-playlists-small.png)](../../images/screen-playlists.png)
 
 *Playlists, from Music Assistant.*
 
-[![Settings: battery, IP address and firmware version](../../images/screen-settings-small.jpg)](../../images/screen-settings.jpg)
+[![Settings: battery, IP address and firmware version](../../images/screen-settings-small.png)](../../images/screen-settings.png)
 
-*Settings. The IP address is blanked out here.*
+*Settings: the battery, the dial's address and the firmware version.*
 
-[![A firmware update at 42 percent](../../images/screen-update-small.jpg)](../../images/screen-update.jpg)
+[![A firmware update at 42 percent](../../images/screen-update-small.png)](../../images/screen-update.png)
 
 *An update over Wi-Fi, part way through.*
 
-[![The power-on logo: eight coloured bars](../../images/screen-logo-small.jpg)](../../images/screen-logo.jpg)
+[![The power-on logo: eight coloured bars](../../images/screen-logo-small.png)](../../images/screen-logo.png)
 
 *The logo the dial shows when it starts.*
 
@@ -62,9 +70,21 @@ One token per job. Two things that happen to be the same colour or size today st
 
 *Typography: every size the dial uses, by job.*
 
+[![The shape tokens: corner radius and opacity](../../images/design-shape-small.jpg)](../../images/design-shape.jpg)
+
+*Shape: every corner radius and every opacity, by job.*
+
 [![The atoms: the screen, the rim, the arc, album art, the pill, the transport buttons and the icons](../../images/design-atoms-small.jpg)](../../images/design-atoms.jpg)
 
-*The smallest parts, which the screens are built from.*
+*Atoms: the smallest parts, which everything else is built from.*
+
+[![The molecules: rows, badges, bars and the battery icon](../../images/design-molecules-small.jpg)](../../images/design-molecules.jpg)
+
+*Molecules: atoms put together, such as a menu row or the letter badge.*
+
+[![The components: the transport bar, the logo, the trident and the connecting list](../../images/design-components-small.jpg)](../../images/design-components.jpg)
+
+*Components: the larger pieces a screen is made of.*
 
 [![Every screen in its journey, column by column](../../images/design-flows-small.jpg)](../../images/design-flows.jpg)
 
@@ -87,4 +107,4 @@ The screens can't run without the firmware or the simulator. To change how somet
 
 ---
 
-[← Part 2](../02-wall-mount/README.md) · [All parts](../../README.md#the-parts) · [Part 4 →](../04-firmware/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · **3 · Screens** · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)

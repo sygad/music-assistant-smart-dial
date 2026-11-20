@@ -1,8 +1,8 @@
-[← Part 3](../03-screens/README.md) · [All parts](../../README.md#the-parts) · [Part 5 →](../05-music-assistant/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · **4 · Firmware** · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)
 
 # Part 4 · The firmware
 
-[![A firmware update at 42 percent](../../images/screen-update-small.jpg)](../../images/screen-update.jpg)
+[![A firmware update at 42 percent](../../images/screen-update-small.png)](../../images/screen-update.png)
 
 *An update arriving over Wi-Fi.*
 
@@ -83,4 +83,4 @@ The file has to be served from Home Assistant because the dial's network can't r
 
 ---
 
-[← Part 3](../03-screens/README.md) · [All parts](../../README.md#the-parts) · [Part 5 →](../05-music-assistant/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · **4 · Firmware** · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)

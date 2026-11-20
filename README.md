@@ -27,8 +27,8 @@ README.md              this page
 BUILD-WITH-AI.md       hand the whole build to an AI assistant
 STORY.md               how it came about, with photos
 parts/
-  01-the-dial/         the Waveshare board: what's on it, the pins
-  02-wall-mount/       the 3D-printed mount and wedge (STL), and a CAD model of the dial (STEP)
+  01-the-dial/         the Waveshare board: what's on it, the pins, and its 3D model (Fusion, STEP, STL)
+  02-wall-mount/       the 3D-printed bracket and wedge (STL to print, Fusion and STEP to change)
   03-screens/          every screen, and the Figma design system they're drawn from
   04-firmware/         building it, your settings, flashing, updates over Wi-Fi
   05-music-assistant/  what the dial asks Music Assistant for
@@ -45,13 +45,12 @@ demo/                  the browser demo, as published
 - **Have an AI build it for me** → [BUILD-WITH-AI.md](BUILD-WITH-AI.md)
 - **Build all of it myself** → [Quick start](#quick-start)
 - **Take just one part** → [The parts](#the-parts), then open that part's page
-- **Just look** → [Play with it in your browser](https://sygad.github.io/music-assistant-smart-dial/demo/)
 
 ---
 
 ## The parts
 
-1. **[The dial](parts/01-the-dial/README.md)**: a Waveshare ESP32-S3 with a 360 × 360 round touchscreen inside a turning ring, a microphone and a haptic motor. Stock hardware.
+1. **[The dial](parts/01-the-dial/README.md)**: a Waveshare ESP32-S3 with a 360 × 360 round touchscreen inside a turning ring, a microphone and a haptic motor. Stock hardware, with a 3D model of it to download.
 2. **[The wall mount](parts/02-wall-mount/README.md)**: a printed bracket and a wedge that tilts the face up towards you.
 3. **[The screens and the design system](parts/03-screens/README.md)**: every screen the dial draws, designed in Figma first, with one token per job.
 4. **[The firmware](parts/04-firmware/README.md)**: C on ESP-IDF, drawn with LVGL. Builds with one command, updates itself over Wi-Fi.
@@ -60,9 +59,9 @@ demo/                  the browser demo, as published
 7. **[Voice search](parts/07-voice-search/README.md)**: choose Search and speak. Home Assistant's Whisper add-on turns it into words.
 8. **[The browser demo](parts/08-browser-demo/README.md)**: the same screens compiled for the web, to try ideas without the hardware.
 
-[![The dial's menu, as captured from the dial](images/screen-menu-small.jpg)](images/screen-menu.jpg)
+[![The dial's menu](images/screen-menu-small.png)](images/screen-menu.png)
 
-*The menu, captured from the dial over USB. More on [the screens page](parts/03-screens/README.md).*
+*The menu, from the Figma design system. More on [the screens page](parts/03-screens/README.md).*
 
 ---
 

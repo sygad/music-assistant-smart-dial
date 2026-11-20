@@ -1,8 +1,8 @@
-[← Part 5](../05-music-assistant/README.md) · [All parts](../../README.md#the-parts) · [Part 7 →](../07-voice-search/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · **6 · Home Assistant** · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)
 
 # Part 6 · Home Assistant
 
-[![The tone controls: treble, bass and subwoofer](../../images/screen-eq-over-art-small.jpg)](../../images/screen-eq-over-art.jpg)
+[![The tone controls: treble, bass and subwoofer](../../images/screen-trident-small.png)](../../images/screen-trident.png)
 
 *Every turn of treble, bass, subwoofer or volume on the dial is a helper in Home Assistant, and an automation sends it to the Denon.*
 
@@ -76,4 +76,4 @@ The dial never talks to the Denon's controls itself. It writes a helper, and an 
 
 ---
 
-[← Part 5](../05-music-assistant/README.md) · [All parts](../../README.md#the-parts) · [Part 7 →](../07-voice-search/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · **6 · Home Assistant** · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)

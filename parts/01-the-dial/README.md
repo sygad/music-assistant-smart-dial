@@ -1,4 +1,4 @@
-[All parts](../../README.md#the-parts) · [Part 2 →](../02-wall-mount/README.md)
+[🏠 Home](../../README.md) · **1 · The dial** · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)
 
 # Part 1 · The dial
 
@@ -18,7 +18,17 @@ The hardware is stock: a round touchscreen inside a ring that turns, with an ESP
 - **Haptics:** a DRV2605 driving a small vibration motor, for a tick on every step
 - **Microphone:** PDM, recorded at 16 kHz for voice search
 - **Power:** USB-C, which is also how it's flashed the first time
-- **Files for this part:** `firmware/components/board/` (the drivers), `firmware/sdkconfig.defaults` (the chip settings)
+- **Files for this part:** `firmware/components/board/` (the drivers), `firmware/sdkconfig.defaults` (the chip settings), and the 3D model below
+
+## The 3D model
+
+A model of the dial, made in Fusion from Waveshare's photographs, two published sizes and measurements of the real one. Waveshare doesn't publish a model of it. Use it to design your own mount or case, or to render it. Click a file, then use GitHub's download button.
+
+- **[smart-dial.f3d](smart-dial.f3d)**: the Fusion design, with its named parameters (the measured sizes), to open and change in Fusion
+- **[smart-dial.step](smart-dial.step)**: the same model for any other CAD tool
+- **[smart-dial.stl](smart-dial.stl)**: a mesh of the whole dial, for viewing, slicing or rendering. GitHub shows it in 3D when you click it
+
+The model has six named parts: the black base, the blue ring, the bezel, the cover glass, the USB-C socket and the toggle switch. It is 66 mm across and 22 mm tall.
 
 ## The pins
 
@@ -43,4 +53,4 @@ All of these are fixed by the board. They're listed so you can check them agains
 
 ---
 
-[All parts](../../README.md#the-parts) · [Part 2 →](../02-wall-mount/README.md)
+[🏠 Home](../../README.md) · **1 · The dial** · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · [8 · Browser demo](../08-browser-demo/README.md)

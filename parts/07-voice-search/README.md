@@ -1,8 +1,8 @@
-[← Part 6](../06-home-assistant/README.md) · [All parts](../../README.md#the-parts) · [Part 8 →](../08-browser-demo/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · **7 · Voice search** · [8 · Browser demo](../08-browser-demo/README.md)
 
 # Part 7 · Voice search
 
-[![The menu with Search at the top](../../images/screen-menu-small.jpg)](../../images/screen-menu.jpg)
+[![The menu with Search at the top](../../images/screen-menu-small.png)](../../images/screen-menu.png)
 
 *Search is the first item in the menu.*
 
@@ -38,4 +38,4 @@ Only Search uses this part. The rest of the dial doesn't need it.
 
 ---
 
-[← Part 6](../06-home-assistant/README.md) · [All parts](../../README.md#the-parts) · [Part 8 →](../08-browser-demo/README.md)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · **7 · Voice search** · [8 · Browser demo](../08-browser-demo/README.md)

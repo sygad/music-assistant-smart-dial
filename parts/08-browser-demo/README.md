@@ -1,10 +1,10 @@
-[← Part 7](../07-voice-search/README.md) · [All parts](../../README.md#the-parts)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · **8 · Browser demo**
 
 # Part 8 · The browser demo
 
-[![The dial in the browser, on an album with its play button](../../images/17-demo.jpg)](../../images/17-demo.jpg)
+[![The dial in the browser, browsing albums under A](../../images/demo-albums.jpg)](../../images/demo-albums.jpg)
 
-*The demo on an album, ready to play.*
+*The demo browsing albums, with the letter badge at the top.*
 
 The dial's own `ui/` and `core/` code, compiled for the web with Emscripten. It's how the screens were built and tried without flashing anything, and it's the public demo.
 
@@ -43,4 +43,4 @@ The dial's own `ui/` and `core/` code, compiled for the web with Emscripten. It'
 
 ---
 
-[← Part 7](../07-voice-search/README.md) · [All parts](../../README.md#the-parts)
+[🏠 Home](../../README.md) · [1 · The dial](../01-the-dial/README.md) · [2 · Wall mount](../02-wall-mount/README.md) · [3 · Screens](../03-screens/README.md) · [4 · Firmware](../04-firmware/README.md) · [5 · Music Assistant](../05-music-assistant/README.md) · [6 · Home Assistant](../06-home-assistant/README.md) · [7 · Voice search](../07-voice-search/README.md) · **8 · Browser demo**
