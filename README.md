@@ -8,7 +8,9 @@ It's a [Waveshare ESP32-S3 knob](https://www.waveshare.com/esp32-s3-knob-touch-l
 
 *The dial is the real CAD model and the screen is a real capture from the dial. The bathroom around it is a render.*
 
-<!-- VIDEO -->
+[![Play the film: the Smart Dial for Music Assistant](images/video-promo.jpg)](https://www.youtube.com/watch?v=xH4IRD8Qvyk)
+
+*▶ **[Watch the film on YouTube](https://www.youtube.com/watch?v=xH4IRD8Qvyk)**. Real dial footage is [further down](#see-it-in-use).*
 
 ▶ **[Play with the dial in your browser](https://sygad.github.io/music-assistant-smart-dial/demo/)**: the same screens, running the same code as the hardware.
 
@@ -74,6 +76,18 @@ demo/                  the browser demo, as published
 - **Playlists and Recent**, straight from Music Assistant.
 - **Music off.** One item in the menu fades the volume, stops the stream and powers the amps down.
 - **Updates over Wi-Fi**, started from Home Assistant.
+
+---
+
+## See it in use
+
+[![Play the video: turning the volume up on the dial](images/video-in-use-1.jpg)](https://www.youtube.com/watch?v=JvW5l7oB9bc&t=2s)
+
+*▶ **[The dial in use, part 1](https://www.youtube.com/watch?v=JvW5l7oB9bc&t=2s)**, filmed on the real dial.*
+
+[![Play the video: the dial in front of the Denon amplifier](images/video-in-use-2.jpg)](https://www.youtube.com/watch?v=qYZj3Z9ab5w)
+
+*▶ **[The dial in use, part 2](https://www.youtube.com/watch?v=qYZj3Z9ab5w)**, with the Denon it drives.*
 
 ---
 
