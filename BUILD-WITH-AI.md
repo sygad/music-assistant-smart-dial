@@ -15,7 +15,7 @@ This repo is written so an AI assistant can build your own dial from it. It does
 - **[Claude Code](https://claude.com/claude-code)** on the computer the dial is plugged into. This is the route I've tested.
 - **[HA-MCP](https://github.com/homeassistant-ai/ha-mcp)** connected to Claude Code, so it can read and change Home Assistant.
 - **A USB-C data cable** between the computer and the dial.
-- **Your Wi-Fi password and two tokens**, which you type into `config/secrets.local` yourself. The AI never types passwords or tokens.
+- **Your Wi-Fi password and two tokens**, which you type into `config/secrets.local` yourself: a Home Assistant long-lived access token (in Home Assistant, your profile → Security) and a Music Assistant long-lived token (in Music Assistant, Settings → Profile). The AI never types passwords or tokens.
 
 Other AI assistants with a similar connection to your computer and Home Assistant should work too. Without a connection, an AI can still talk you through it, and you do the typing.
 

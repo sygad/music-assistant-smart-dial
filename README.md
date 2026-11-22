@@ -118,7 +118,7 @@ demo/                  the browser demo, as published
 ## Quick start
 
 1. **Home Assistant first.** Add the helpers, the blueprint, the scripts and the automations from `home-assistant/`, and change the entity ids marked `CHANGE`. → [Part 6](parts/06-home-assistant/README.md)
-2. **Your settings.** Copy `config/secrets.example` to `config/secrets.local` and fill in your Wi-Fi, your two tokens, your server addresses and your Music Assistant player. → [Part 4](parts/04-firmware/README.md#your-settings)
+2. **Your settings.** Copy `config/secrets.example` to `config/secrets.local` and fill in your Wi-Fi, your server addresses, your Music Assistant player and two tokens: a Home Assistant long-lived access token (your profile → Security) and a Music Assistant long-lived token (Settings → Profile). → [Part 4](parts/04-firmware/README.md#your-settings)
 3. **Build and flash.** Install ESP-IDF 5.5, plug the dial in, and run `tools/fw.sh flash`. → [Part 4](parts/04-firmware/README.md)
 4. **Voice search** (optional). Install the Whisper add-on. → [Part 7](parts/07-voice-search/README.md)
 5. **Mount it** (optional). Print the bracket and the wedge. → [Part 2](parts/02-wall-mount/README.md)
