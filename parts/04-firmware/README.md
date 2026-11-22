@@ -37,7 +37,7 @@ Copy `config/secrets.example` to `config/secrets.local` and fill it in. `secrets
 - `HA_SERVER`: your Home Assistant, e.g. `http://homeassistant.local:8123`.
 - `MA_SERVER`: your Music Assistant, e.g. `http://homeassistant.local:8095`.
 - `AMP_SERVER`: your Denon's address, e.g. `http://192.168.1.50`. **Leave it blank if you have no amp.** The dial then treats the amp as always connected: every screen works, and the volume and tone controls change nothing. Got one later? Type its address into Home Assistant's `input_text.<room>_dial_amp_address` instead: no rebuild ([part 6](../06-home-assistant/README.md)).
-- `MA_PLAYER`: the id of the Music Assistant player the dial plays to. **Leave it blank if you have no streamer:** the dial browses as usual, and nothing plays. Got one later? Type its player id into `input_text.<room>_dial_player` instead: no rebuild.
+- `MA_PLAYER`: the id of the Music Assistant player the dial plays to. **Leave it blank if you have no streamer:** the dial browses as usual, and nothing plays. Got one later? Type its name, as Music Assistant shows it, into `input_text.<room>_dial_player` instead: no rebuild.
 - `DIAL_ROOM`: the room the dial is in, lower case with `_` for spaces. Every helper and sensor the dial uses is named from it: `kitchen` gives `input_number.kitchen_amp_volume` and `sensor.kitchen_dial_battery`. The files in `home-assistant/` are written for `your_room`, which is the example's value.
 
 The tokens are compiled into the firmware, so treat a built `.bin` like the tokens themselves.

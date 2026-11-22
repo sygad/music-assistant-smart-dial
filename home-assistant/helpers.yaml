@@ -46,6 +46,7 @@ input_text:
     mode: text
   # Where the amp and the streamer are. The dial reads these when it starts,
   # and restarts itself within a minute of either changing while it's awake.
+  # Dial Player takes the name as Music Assistant shows it, or the player id.
   # Empty means use AMP_SERVER and MA_PLAYER from config/secrets.local.
   your_room_dial_amp_address:
     name: Dial Amp Address

@@ -28,6 +28,7 @@ typedef struct {
 
 void ma_init(void);                          /* once: cJSON allocates from PSRAM */
 ma_conn_t *ma_open(size_t max_response);     /* one per task; keeps the connection open */
+void ma_close(ma_conn_t *c);                 /* for a connection used once, e.g. at start-up */
 
 /* Run an API command. Takes ownership of args. Returns the parsed result (free
  * with cJSON_Delete) or NULL. */

@@ -9,7 +9,8 @@
  * everything else:
  *
  *   input_text.<room>_dial_amp_address   e.g. http://192.168.1.50, or empty
- *   input_text.<room>_dial_player        the Music Assistant player id, or empty
+ *   input_text.<room>_dial_player        the player's name in Music Assistant
+ *                                        ("Bathroom Streamer"), or its id, or empty
  *
  * A helper that holds something wins. One that is empty, missing or can't be
  * read falls back to AMP_SERVER and MA_PLAYER from secrets.local, so a dial
@@ -28,3 +29,8 @@ void where_check(void);  /* blocking: now and then while awake; restarts the dia
 
 const char *where_amp(void);     /* the amp's address, or "" for no amp */
 const char *where_player(void);  /* the Music Assistant player id, or "" for none */
+
+/* Nobody knows a player's id: Music Assistant shows names. So the helper may
+ * hold the name as Music Assistant shows it, and where_load turns it into the
+ * id, once, by asking for every player. A name that matches nothing is kept as
+ * it is, and the start-up check then says "No streamer". */

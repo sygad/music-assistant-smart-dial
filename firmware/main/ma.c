@@ -48,6 +48,14 @@ ma_conn_t *ma_open(size_t max_response)
     return c;
 }
 
+void ma_close(ma_conn_t *c)
+{
+    if (!c) return;
+    esp_http_client_cleanup(c->http);
+    heap_caps_free(c->buf);
+    heap_caps_free(c);
+}
+
 /* Walk a JSON array as it arrives, one element at a time.
  *
  * Two limits used to decide how long a list could be. The reply had to fit
