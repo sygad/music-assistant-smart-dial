@@ -38,6 +38,8 @@ parts/
   07-voice-search/     speech to text with the Whisper add-on
   08-browser-demo/     the simulator: the dial's own code in a web page
 core/  ui/  firmware/  sim/  tests/  tools/  config/     the source
+assets/figma/          the icons exported from Figma, turned into C by tools/png_to_c.py
+docs/MEMORY.md         the firmware's memory budget, measured on the dial
 home-assistant/        the Home Assistant YAML, ready to paste
 demo/                  the browser demo, as published
 ```
