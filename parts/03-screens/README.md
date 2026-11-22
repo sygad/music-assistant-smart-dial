@@ -18,7 +18,7 @@ The whole design is in a public Figma file. You don't need an account to look ro
 - **Flows:** each journey as a column, every screen in order with its parts named.
 - **The earlier pages:** Concept, Logo Design, Video Animation Scrapbook, Simplified Design for AI Starting Point, and the two older versions of the flows. They show how it got here. Only Components and Flows are kept up to date.
 
-**To make your own copy,** sign in to Figma (a free account works), open the file, and choose **Duplicate to your drafts** from the menu on the file's name. **File › Save local copy** gives you a `.fig` file instead.
+**The file is view only.** Anyone can open it, move around and zoom in, but nobody can change it, copy it or export from it. It's a reference for how every screen should look, not a file to work in. To change how your own dial looks, you change the code, as below.
 
 ## At a glance
 
@@ -109,10 +109,10 @@ One token per job. Two things that happen to be the same colour or size today st
 
 ## Add just this part
 
-The screens can't run without the firmware or the simulator. To change how something looks:
+The screens can't run without the firmware or the simulator. The look of your dial lives in the code, so that's where you change it:
 
-1. Find it in Figma first, and change it there.
-2. Find its colour, size or position in `ui/`: each Figma variable's description names the file and line.
+1. Find the screen in the [Figma file](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179) to see what you want to change.
+2. Find the same screen in `ui/`: there's one C file per screen, and the colours, sizes and positions are set there. Change them.
 3. Try it in the [browser demo](../08-browser-demo/README.md) before you flash it.
 
 ---

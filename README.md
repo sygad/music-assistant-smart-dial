@@ -14,7 +14,7 @@ It's a [Waveshare ESP32-S3 knob](https://www.waveshare.com/esp32-s3-knob-touch-l
 
 ▶ **[Play with the dial in your browser](https://sygad.github.io/music-assistant-smart-dial/demo/)**: the same screens, running the same code as the hardware.
 
-🎨 **[Open the design in Figma](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179)**: every screen, colour, size and part, in a public Figma file anyone can open.
+🎨 **[Open the design in Figma](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179)**: every screen, colour, size and part, in a view-only Figma file anyone can open.
 
 📖 **[Read the story](STORY.md)**: from the speakers in the ceiling to the dial on the wall.
 
@@ -46,7 +46,7 @@ demo/                  the browser demo, as published
 
 - **Have an AI build it for me** → [BUILD-WITH-AI.md](BUILD-WITH-AI.md)
 - **Build all of it myself** → [Quick start](#quick-start)
-- **Change how it looks** → [the Figma file](https://www.figma.com/design/mw6DqUCYR7QaJUeKkVRTeP/Rotary-Dial-Media--Public-?node-id=862-179), then [part 3](parts/03-screens/README.md)
+- **Change how it looks** → [part 3](parts/03-screens/README.md#add-just-this-part): the screens are changed in the code, with the Figma file as the reference
 - **Take just one part** → [The parts](#the-parts), then open that part's page
 
 ---
