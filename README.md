@@ -29,7 +29,7 @@ README.md              this page
 BUILD-WITH-AI.md       hand the whole build to an AI assistant
 STORY.md               how it came about, with photos
 parts/
-  01-the-dial/         the Waveshare board: what's on it, the pins, and its 3D model (Fusion, STEP, STL)
+  01-the-dial/         the Waveshare board: what's on it, the pins, and its 3D model (Fusion, STEP, STL, and each part on its own)
   02-wall-mount/       the 3D-printed bracket and wedge (STL to print, Fusion and STEP to change)
   03-screens/          every screen, and the public Figma file they're drawn from
   04-firmware/         building it, your settings, flashing, updates over Wi-Fi

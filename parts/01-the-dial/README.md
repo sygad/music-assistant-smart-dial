@@ -30,6 +30,17 @@ A model of the dial, made in Fusion from Waveshare's photographs, two published 
 
 The model has six named parts: the black base, the blue ring, the bezel, the cover glass, the USB-C socket and the toggle switch. It is 66 mm across and 22 mm tall.
 
+**Each part on its own**, for printing in more than one colour or material, or for rendering with a different finish on each. They are finer meshes than the whole-dial file, and they line up with each other and with it, so they can be loaded together and stay in place:
+
+- **[base.stl](parts/base.stl)**: the black base
+- **[ring.stl](parts/ring.stl)**: the blue turning ring
+- **[bezel.stl](parts/bezel.stl)**: the black bezel around the screen
+- **[cover-glass.stl](parts/cover-glass.stl)**: the glass over the screen
+- **[usb-c-socket.stl](parts/usb-c-socket.stl)**: the USB-C socket
+- **[toggle-switch.stl](parts/toggle-switch.stl)**: the power switch
+
+The wall mount's two pieces, the bracket and the wedge, are already separate files on [part 2](../02-wall-mount/README.md).
+
 ## The pins
 
 All of these are fixed by the board. They're listed so you can check them against your own unit, and they live in `firmware/components/board/`.
