@@ -101,6 +101,15 @@ demo/                  the browser demo, as published
 
 **You won't hear any music.** With nothing to play to, playing does nothing and the volume and tone controls change nothing. It's a way to get the feel of the dial before you buy anything else. Add a streamer later and the music plays; add an amp and the volume and tone work.
 
+### Adding a streamer or an amp later
+
+Nothing you set up first is thrown away. The helpers stay, the room name stays, and the dial keeps its settings file. Each new piece is one line in that file and one rebuild:
+
+1. **A streamer:** add it to Music Assistant, put its player id in `MA_PLAYER` in `config/secrets.local`, and update the dial. Music now plays. → [Part 5](parts/05-music-assistant/README.md)
+2. **An amp:** put its address in `AMP_SERVER`, add the scripts and automations from part 6 to Home Assistant, and update the dial. The volume and tone controls now drive it. → [Part 6](parts/06-home-assistant/README.md)
+
+The settings are built into the firmware, so changing them always means updating the dial: `tools/fw.sh flash` with it on its USB cable, or `tools/fw.sh ota` over Wi-Fi once it's on the wall ([part 4](parts/04-firmware/README.md#updates-over-wi-fi)). With an AI, say "I've got a streamer now" or "I've got an amp now" and point it at [BUILD-WITH-AI.md](BUILD-WITH-AI.md).
+
 ### Hardware
 
 - **[Waveshare ESP32-S3-Knob-Touch-LCD-1.8](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm)**: the dial. Used by every part.

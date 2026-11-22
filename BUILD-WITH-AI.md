@@ -71,6 +71,16 @@ Don't install, create or change anything until I've approved your plan.
 
 Make the helpers (Step 4, item 1) and build the firmware (Step 5) with `AMP_SERVER` blank. Leave out the blueprint, the scripts and every automation except `music-auto-off` if they want it: all of them exist to drive the amp. Music off then turns the music helper off but doesn't stop Music Assistant playing, because stopping the stream is in `music-on-off`, which also powers the amps down. Tell the user that, and that the rest of part 6 can be added once they have an amp.
 
+### Coming back later with a streamer or an amp
+
+The user built the no-streamer or no-amp version and now has the piece that was missing. Don't start again. Their helpers, `DIAL_ROOM` and `config/secrets.local` stay as they are.
+
+1. Ask what's new: a streamer, an amp, or both. Ask the questions in Step 1 for that piece only.
+2. **A streamer:** check it's a player in Music Assistant, and ask the user to put its player id in `MA_PLAYER`.
+3. **An amp:** map it as in Step 2, show the plan (Step 3), then add the blueprint, scripts and automations (Step 4, items 2 to 4). The helpers are already there. Ask the user to put the amp's address in `AMP_SERVER`.
+4. Rebuild and update the dial: `tools/fw.sh flash` if it's on USB, or `tools/fw.sh ota` if it's on the wall and updates over Wi-Fi are set up.
+5. Check the new piece only, from Step 6: an album plays through the streamer, or the volume moves the amp.
+
 ### Step 2: Map their things to the roles
 
 - **The Denon:** a `media_player` from the `denonavr` integration. Replaces `media_player.your_room_denon_amp`.
