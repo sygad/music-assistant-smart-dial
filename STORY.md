@@ -171,8 +171,6 @@ An early interactive prototype explored the screens and how the dial and touch w
 
 *The prototype on Now Playing. The panel on the right stands in for the knob: jump to any screen, turn the encoder, swipe and tap.*
 
-▶ **[Try the prototype](https://sygad.github.io/rotary-dial-media-prototype/)**
-
 > This is **only a prototype**: the first version, made to see and validate whether the Figma designs could be used on the Waveshare device. The real dial is built separately.
 
 ### Testing it with people
