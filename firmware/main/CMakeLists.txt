@@ -27,6 +27,7 @@ set(HA_SERVER "")
 set(MA_SERVER "")
 set(AMP_SERVER "")
 set(MA_PLAYER "")
+set(DIAL_ROOM "")
 foreach(line IN LISTS SECRET_LINES)
     if(line MATCHES "^WIFI_SSID=(.*)$")
         set(WIFI_SSID "${CMAKE_MATCH_1}")
@@ -44,15 +45,23 @@ foreach(line IN LISTS SECRET_LINES)
         set(AMP_SERVER "${CMAKE_MATCH_1}")
     elseif(line MATCHES "^MA_PLAYER=(.*)$")
         set(MA_PLAYER "${CMAKE_MATCH_1}")
+    elseif(line MATCHES "^DIAL_ROOM=(.*)$")
+        set(DIAL_ROOM "${CMAKE_MATCH_1}")
     endif()
 endforeach()
 # The addresses and the player are this house's, so they live beside the
 # tokens rather than in the C: anyone else building it fills in their own.
-foreach(v HA_SERVER MA_SERVER AMP_SERVER MA_PLAYER)
+# AMP_SERVER may be blank: no amp, and amp.c takes it as always there.
+foreach(v HA_SERVER MA_SERVER MA_PLAYER DIAL_ROOM)
     if("${${v}}" STREQUAL "")
         message(FATAL_ERROR "config/secrets.local has no ${v}= (see config/secrets.example)")
     endif()
 endforeach()
+# DIAL_ROOM becomes part of every entity id, so it must be one: lower case,
+# digits and underscores.
+if(NOT DIAL_ROOM MATCHES "^[a-z0-9_]+$")
+    message(FATAL_ERROR "DIAL_ROOM=${DIAL_ROOM} in config/secrets.local must be lower case letters, digits and _ only")
+endif()
 string(REGEX REPLACE "/+$" "" HA_SERVER "${HA_SERVER}")
 string(REGEX REPLACE "/+$" "" MA_SERVER "${MA_SERVER}")
 string(REGEX REPLACE "/+$" "" AMP_SERVER "${AMP_SERVER}")
@@ -70,5 +79,6 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/secrets_gen.h
     "#define SECRET_HA_SERVER \"${HA_SERVER}\"\n"
     "#define SECRET_MA_SERVER \"${MA_SERVER}\"\n"
     "#define SECRET_AMP_SERVER \"${AMP_SERVER}\"\n"
-    "#define SECRET_MA_PLAYER \"${MA_PLAYER}\"\n")
+    "#define SECRET_MA_PLAYER \"${MA_PLAYER}\"\n"
+    "#define SECRET_DIAL_ROOM \"${DIAL_ROOM}\"\n")
 target_include_directories(${COMPONENT_LIB} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})

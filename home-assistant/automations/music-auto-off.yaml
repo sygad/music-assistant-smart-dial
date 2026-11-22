@@ -14,15 +14,15 @@ triggers:
     for: 00:20:00
 conditions:
 - condition: state
-  entity_id: input_boolean.bathroom_music
+  entity_id: input_boolean.your_room_music
   state: 'on'
 actions:
 - action: input_boolean.turn_off
   target:
-    entity_id: input_boolean.bathroom_music
+    entity_id: input_boolean.your_room_music
 - action: automation.trigger
   target:
-    entity_id: automation.bathroom_music_fade_off
+    entity_id: automation.your_room_music_fade_off
   data:
     skip_condition: true
 mode: single

@@ -1,29 +1,29 @@
 # Puts the Denon back on the streamer input and the right volume if it wanders.
 # Home Assistant automation for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
 # Paste it into a new automation in YAML mode. Search this file for CHANGE.
-# CHANGE: these also appear inside templates below: media_player.bathroom_denon_amp
+# CHANGE: these also appear inside templates below: media_player.your_room_denon_amp
 id: '1793610140048'
 alias: Bathroom Amp Input Regain
 description: |-
-  Takes the Denon's input back for the bathroom whenever the dial or the bathroom dashboard is driving the music. The amp is shared: anything that plays to it directly through Music Assistant (media_player.bathroom_denon_amp_ma - the Homey music-flow card on the ideas dashboard is one such thing) makes it switch to its own NETWORK input to take that stream, and it never switches back. That happened at 16:53 on 1 Nov 2026 and the bathroom was silent until the 2nd: the streamer playing, the amp on, the volume at 71, and the amp listening to an empty network input.
+  Takes the Denon's input back for the bathroom whenever the dial or the bathroom dashboard is driving the music. The amp is shared: anything that plays to it directly through Music Assistant (media_player.your_room_denon_amp_ma - the Homey music-flow card on the ideas dashboard is one such thing) makes it switch to its own NETWORK input to take that stream, and it never switches back. That happened at 16:53 on 1 Nov 2026 and the bathroom was silent until the 2nd: the streamer playing, the amp on, the volume at 71, and the amp listening to an empty network input.
 
-  The rule is regain, not forbid (Darren, 2 Nov 2026). While input_boolean.bathroom_music is off the amp is nobody's and nothing here interferes, so the ideas dashboard can play to it freely. While it is on, this room's music belongs to the dial and the bathroom view, and the input comes back.
+  The rule is regain, not forbid (Darren, 2 Nov 2026). While input_boolean.your_room_music is off the amp is nobody's and nothing here interferes, so the ideas dashboard can play to it freely. While it is on, this room's music belongs to the dial and the bathroom view, and the input comes back.
 
   Two ways in. A drift trigger: the amp's own source moved off SAT/CBL, so put it back at once - guarded by reading the source so the command this automation sends cannot re-trigger it. And an activity trigger: the volume helper moved (the dial or the dashboard slider) or the streamer started playing, which says the bathroom is being used now - that one re-asserts the input blind rather than trusting the source attribute, because the denonavr integration polls every 10 seconds and is often slower, so a read can be that far out of date. The amp's own MV and SI commands measured 13-17 ms, so sending one is nothing; the 15 second cooldown is there because the dial writes the volume about seven times a second while it is turned.
 
-  Takes the volume back too, not just the input (Darren, 2 Nov 2026). Something that grabs the amp through Music Assistant can set its volume as well as its input, and nothing was putting that right: the bathroom dashboard slider and the dial both went on showing the old number while the amp sat at whatever the other dashboard had left it at. Only automation.bathroom_amp_volume_disagreement noticed, thirty seconds later, and it treats it as a wedged integration, which is far too heavy a response to somebody simply having moved it. So the last action re-asserts input_number.bathroom_amp_volume at the amp on the same activity and drift triggers as the input. It is guarded on the two actually disagreeing by more than 2, so in the normal case nothing is sent and no command the dial has in flight is cancelled. The direction is deliberate and is what Darren asked for: the helper is the voice of truth and the amp is corrected to it, never the reverse. That is also why automation.bathroom_sync_volume_from_amp is off - it ran the other way.
+  Takes the volume back too, not just the input (Darren, 2 Nov 2026). Something that grabs the amp through Music Assistant can set its volume as well as its input, and nothing was putting that right: the bathroom dashboard slider and the dial both went on showing the old number while the amp sat at whatever the other dashboard had left it at. Only automation.your_room_amp_volume_disagreement noticed, thirty seconds later, and it treats it as a wedged integration, which is far too heavy a response to somebody simply having moved it. So the last action re-asserts input_number.your_room_amp_volume at the amp on the same activity and drift triggers as the input. It is guarded on the two actually disagreeing by more than 2, so in the normal case nothing is sent and no command the dial has in flight is cancelled. The direction is deliberate and is what Darren asked for: the helper is the voice of truth and the amp is corrected to it, never the reverse. That is also why automation.your_room_sync_volume_from_amp is off - it ran the other way.
 triggers:
 - trigger: state
-  entity_id: input_number.bathroom_amp_volume
+  entity_id: input_number.your_room_amp_volume
   id: activity
   note: 'the dial or the bathroom dashboard''s slider: somebody is using this room now'
 - trigger: state
-  entity_id: media_player.bathroom_streamer_ma  # CHANGE: your streamer as a Music Assistant player
+  entity_id: media_player.your_room_streamer_ma  # CHANGE: your streamer as a Music Assistant player
   to: playing
   id: activity
   note: the streamer picking up a track, however it was asked for
 - trigger: state
-  entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+  entity_id: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
   attribute: source
   id: drift
   note: the amp telling us it has been taken
@@ -32,13 +32,13 @@ triggers:
   id: drift
 conditions:
 - condition: state
-  entity_id: input_boolean.bathroom_music
+  entity_id: input_boolean.your_room_music
   state: 'on'
   note: the amp is only the bathroom's while the bathroom's music is on
 - condition: not
   conditions:
   - condition: state
-    entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+    entity_id: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
     state:
     - unavailable
     - unknown
@@ -53,7 +53,7 @@ conditions:
     - condition: not
       conditions:
       - condition: state
-        entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+        entity_id: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
         attribute: source
         state: SAT/CBL
       note: 'Reading the source is what stops the command below re-triggering this: once it has landed the input is right and the next drift trigger falls out here.'
@@ -66,19 +66,19 @@ conditions:
 actions:
 - action: denonavr.get_command
   target:
-    entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+    entity_id: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
   data:
     command: /goform/formiPhoneAppDirect.xml?SISAT/CBL
   continue_on_error: true
   note: SAT/CBL is the input the Bathroom Streamer is wired to. A raw Denon command rather than media_player.select_source, because the integration's source_list offers NET alone.
 - if:
   - condition: template
-    value_template: '{% set lvl = state_attr(''media_player.bathroom_denon_amp'',''volume_level'') %}{{ lvl is not none and (((lvl | float * 100) | round) - (states(''input_number.bathroom_amp_volume'') | float(0) | round | int)) | abs > 2 }}'
+    value_template: '{% set lvl = state_attr(''media_player.your_room_denon_amp'',''volume_level'') %}{{ lvl is not none and (((lvl | float * 100) | round) - (states(''input_number.your_room_amp_volume'') | float(0) | round | int)) | abs > 2 }}'
     note: only when the amp has actually drifted off the helper - normally they agree and nothing is sent, so this never cancels a command the dial has in flight
   then:
-  - action: script.bathroom_amp_volume
+  - action: script.your_room_amp_volume
     data:
-      value: '{{ states(''input_number.bathroom_amp_volume'') | float(0) | round | int }}'
+      value: '{{ states(''input_number.your_room_amp_volume'') | float(0) | round | int }}'
     note: the helper is the voice of truth, so the amp is corrected to it rather than the other way round
   note: Takes the VOLUME back as well as the input (Darren, 2 Nov 2026).
 mode: single

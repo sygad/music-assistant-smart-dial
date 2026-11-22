@@ -1,29 +1,29 @@
 # The helpers the dial reads and writes. Explained in parts/06-home-assistant/README.md.
 # Add them under these keys in configuration.yaml, or make the same ones in Settings > Devices & services > Helpers.
-# The entity ids are the ones the firmware uses (firmware/main/ha.c). Keep them, or change both.
+# The entity ids start with the dial's room, DIAL_ROOM in config/secrets.local (your_room here). Change your_room_ in every file, or set DIAL_ROOM=your_room.
 input_number:
-  bathroom_amp_volume:
+  your_room_amp_volume:
     name: Amp Volume
     min: 0
     max: 98
     step: 1
     mode: slider
     icon: mdi:volume-high
-  bathroom_amp_bass:
+  your_room_amp_bass:
     name: Amp Bass
     min: -6
     max: 6
     step: 1
     mode: slider
     icon: mdi:music-clef-bass
-  bathroom_amp_treble:
+  your_room_amp_treble:
     name: Amp Treble
     min: -6
     max: 6
     step: 1
     mode: slider
     icon: mdi:music-clef-treble
-  bathroom_amp_subwoofer:
+  your_room_amp_subwoofer:
     name: Amp Subwoofer
     min: -12
     max: 12
@@ -31,14 +31,14 @@ input_number:
     mode: slider
     icon: mdi:speaker
 input_boolean:
-  bathroom_music:
+  your_room_music:
     name: Music
     icon: mdi:music
-  bathroom_dial_update:
+  your_room_dial_update:
     name: Dial Update
     icon: mdi:cloud-download
 input_text:
-  bathroom_dial_firmware_url:
+  your_room_dial_firmware_url:
     name: Dial Firmware URL
     icon: mdi:link-variant
     min: 0

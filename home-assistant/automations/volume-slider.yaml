@@ -5,12 +5,12 @@ id: '1775589123371'
 alias: Volume Slider
 description: 'When the bathroom amp volume slider changes, passes its new value to the bathroom amp volume script. Mode restart, not single (2 Nov 2026): the knob writes this helper about seven times a second while it is being turned, and each run waits on the script''s HTTP call to a Denon that can take seconds to answer, so mode single dropped almost all of them - 83 ''Volume Slider: Already running'' warnings in one morning, which is why the dial felt dead while the dashboard slider, one change at a time, worked. Restart is the right shape for a volume: the newest value cancels the one still in flight, because only where the hand has got to matters.'
 triggers:
-- entity_id: input_number.bathroom_amp_volume
+- entity_id: input_number.your_room_amp_volume
   trigger: state
 conditions: []
 actions:
 - data:
     value: '{{ trigger.to_state.state | int }}'
-  action: script.bathroom_amp_volume
+  action: script.your_room_amp_volume
   note: A direct script call, so the run holds until the amp answers; restart mode is what makes that safe.
 mode: restart

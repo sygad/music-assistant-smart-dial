@@ -33,20 +33,25 @@
 static const char *TAG = "ha";
 
 #define HA_BASE   SECRET_HA_SERVER "/api"
-#define HA_MUSIC  "input_boolean.bathroom_music"
+/* Every helper and sensor is named after the room the dial is in, from
+ * DIAL_ROOM in config/secrets.local: "bathroom" gives
+ * input_number.bathroom_amp_volume, "kitchen" input_number.kitchen_amp_volume.
+ * One dial per room, and nobody else's house ends up with bathroom helpers. */
+#define ROOM      SECRET_DIAL_ROOM
+#define HA_MUSIC  "input_boolean." ROOM "_music"
 /* Updating over Wi-Fi: see ha.h. The switch asks, the text says from where,
  * and the two sensors are what the knob says back. */
-#define HA_UPDATE_ASK    "input_boolean.bathroom_dial_update"
-#define HA_UPDATE_URL    "input_text.bathroom_dial_firmware_url"
-#define HA_FIRMWARE_WAS  "sensor.bathroom_dial_firmware"
-#define HA_BATTERY_IS    "sensor.bathroom_dial_battery"
-#define HA_BATTERY_MV_IS "sensor.bathroom_dial_battery_mv"
-#define HA_RAM_IS        "sensor.bathroom_dial_ram"
-#define HA_UPTIME_IS     "sensor.bathroom_dial_uptime"
-#define HA_UPDATE_SAYS   "sensor.bathroom_dial_update"
+#define HA_UPDATE_ASK    "input_boolean." ROOM "_dial_update"
+#define HA_UPDATE_URL    "input_text." ROOM "_dial_firmware_url"
+#define HA_FIRMWARE_WAS  "sensor." ROOM "_dial_firmware"
+#define HA_BATTERY_IS    "sensor." ROOM "_dial_battery"
+#define HA_BATTERY_MV_IS "sensor." ROOM "_dial_battery_mv"
+#define HA_RAM_IS        "sensor." ROOM "_dial_ram"
+#define HA_UPTIME_IS     "sensor." ROOM "_dial_uptime"
+#define HA_UPDATE_SAYS   "sensor." ROOM "_dial_update"
 /* Whether the amp can hear, for Home Assistant to wait on rather than guess
  * at - see say_amp. */
-#define HA_AMP_IS        "sensor.bathroom_dial_amp"
+#define HA_AMP_IS        "sensor." ROOM "_dial_amp"
 
 /* A lost "off" leaves the amps powered until something else notices, while a
  * lost "on" is asked again by the next touch, so a failed call is retried. */
@@ -101,10 +106,10 @@ static const char *TAG = "ha";
 #define HA_UPDATE_POLL_MS 10000
 
 static const char *const NUMBER_ENTITY[HA_NUMBERS] = {
-    [HA_VOLUME] = "input_number.bathroom_amp_volume",
-    [HA_TREBLE] = "input_number.bathroom_amp_treble",
-    [HA_BASS] = "input_number.bathroom_amp_bass",
-    [HA_SUBWOOFER] = "input_number.bathroom_amp_subwoofer",
+    [HA_VOLUME] = "input_number." ROOM "_amp_volume",
+    [HA_TREBLE] = "input_number." ROOM "_amp_treble",
+    [HA_BASS] = "input_number." ROOM "_amp_bass",
+    [HA_SUBWOOFER] = "input_number." ROOM "_amp_subwoofer",
 };
 
 /* The latest value asked for, per helper, and whether it is still to go out.
@@ -268,7 +273,7 @@ void ha_report_firmware(void)
 /* Why the dial last restarted, and if it fell over, where (crash.h). A crash
  * goes in as the state "panic" with the message, the task and the call chain
  * as attributes; the chain decodes against the build's ELF with addr2line. */
-#define HA_RESTART_WAS "sensor.bathroom_dial_last_restart"
+#define HA_RESTART_WAS "sensor." ROOM "_dial_last_restart"
 
 void ha_report_restart(void)
 {

@@ -1,14 +1,14 @@
 # Reloads the Denon integration if the amp goes unavailable while powered.
 # Home Assistant automation for the Music Assistant Smart Dial. Explained in parts/06-home-assistant/README.md.
 # Paste it into a new automation in YAML mode. Search this file for CHANGE.
-# CHANGE: these also appear inside templates below: media_player.bathroom_denon_amp
+# CHANGE: these also appear inside templates below: media_player.your_room_denon_amp
 id: '1793188341917'
 alias: Amp Connection Recovery
-description: 'Self-heals the bathroom Denon amp when its integration wedges. The denonavr integration can get stuck after a connection timeout and stay unavailable even once the amp is back on the network - that happened on 27 Oct 2026 at 20:21 and survived three mains power cycles, needing a manual integration reload. While it is wedged the dashboard volume slider, the smart dial and the music panel''s volume step all silently do nothing, because every one of them targets media_player.bathroom_denon_amp. When the amp entity has been unavailable for 3 minutes while its mains switch is on, this reloads the denonavr config entry (up to 2 attempts), then re-applies the dashboard slider''s value so the amp and the slider agree again. If it still fails it raises a persistent notification rather than leaving the fault silent, and dismisses that notification once the amp recovers. The mains-switch condition matters: the amp is deliberately powered down whenever the bathroom music is off and is
+description: 'Self-heals the bathroom Denon amp when its integration wedges. The denonavr integration can get stuck after a connection timeout and stay unavailable even once the amp is back on the network - that happened on 27 Oct 2026 at 20:21 and survived three mains power cycles, needing a manual integration reload. While it is wedged the dashboard volume slider, the smart dial and the music panel''s volume step all silently do nothing, because every one of them targets media_player.your_room_denon_amp. When the amp entity has been unavailable for 3 minutes while its mains switch is on, this reloads the denonavr config entry (up to 2 attempts), then re-applies the dashboard slider''s value so the amp and the slider agree again. If it still fails it raises a persistent notification rather than leaving the fault silent, and dismisses that notification once the amp recovers. The mains-switch condition matters: the amp is deliberately powered down whenever the bathroom music is off and is
   correctly unavailable then, so without that condition this would reload the integration all night. entry_id is the denonavr config entry - if the integration is ever removed and re-added, this ID must be updated.'
 triggers:
 - trigger: state
-  entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+  entity_id: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
   to: unavailable
   for: 00:03:00
 conditions:
@@ -21,7 +21,7 @@ actions:
     - action: homeassistant.reload_config_entry
       data:
         entry_id: 01KJ39XNSTSW673TKBPYFHTBF0  # CHANGE: the config entry id of your Denon AVR integration
-    - wait_template: '{{ states(''media_player.bathroom_denon_amp'') not in [''unavailable'', ''unknown''] }}'
+    - wait_template: '{{ states(''media_player.your_room_denon_amp'') not in [''unavailable'', ''unknown''] }}'
       timeout: 00:01:30
     until:
     - condition: or
@@ -29,7 +29,7 @@ actions:
       - condition: not
         conditions:
         - condition: state
-          entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+          entity_id: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
           state:
           - unavailable
           - unknown
@@ -37,19 +37,19 @@ actions:
         value_template: '{{ repeat.index >= 2 }}'
 - if:
   - condition: state
-    entity_id: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+    entity_id: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
     state: unavailable
   then:
   - action: persistent_notification.create
     data:
-      notification_id: bathroom_amp_unavailable
+      notification_id: your_room_amp_unavailable
       title: Bathroom amp not responding
       message: The bathroom Denon amp has been unavailable for over 3 minutes and reloading its integration twice did not bring it back. The volume slider and the smart dial will not work until it returns.
   else:
-  - action: script.bathroom_amp_volume
+  - action: script.your_room_amp_volume
     data:
-      value: '{{ states(''input_number.bathroom_amp_volume'') | int }}'
+      value: '{{ states(''input_number.your_room_amp_volume'') | int }}'
   - action: persistent_notification.dismiss
     data:
-      notification_id: bathroom_amp_unavailable
+      notification_id: your_room_amp_unavailable
 mode: single

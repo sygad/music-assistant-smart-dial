@@ -6,5 +6,5 @@ use_blueprint:
   path: denon_avr_audio_control.yaml
   input:
     control: volume
-    denon_media_player: media_player.bathroom_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
+    denon_media_player: media_player.your_room_denon_amp  # CHANGE: your Denon, from the Denon AVR integration
 description: ''

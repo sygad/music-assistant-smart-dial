@@ -5,11 +5,11 @@ id: '1775589113437'
 alias: Treble Slider
 description: When the bathroom amp treble slider changes, passes its new value to the bathroom amp treble script.
 triggers:
-- entity_id: input_number.bathroom_amp_treble
+- entity_id: input_number.your_room_amp_treble
   trigger: state
 conditions: []
 actions:
 - data:
     value: '{{ trigger.to_state.state | int }}'
-  action: script.bathroom_amp_treble
+  action: script.your_room_amp_treble
 mode: single

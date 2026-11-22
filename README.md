@@ -99,8 +99,8 @@ demo/                  the browser demo, as published
 
 - **[Waveshare ESP32-S3-Knob-Touch-LCD-1.8](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm)**: the dial. Used by every part.
 - **A USB-C data cable**: for the first flash and for power.
-- **A Denon AV receiver** controllable by Home Assistant's [Denon AVR integration](https://www.home-assistant.io/integrations/denonavr/). Mine is an AVR-X2000. Used by part 6.
-- **A streamer Music Assistant can play to**, wired into the Denon. Mine is a [WiiM Pro](https://www.wiimhome.com/wiimpro/overview). Used by parts 5 and 6.
+- **Music Assistant with a player to play to.** Mine is a [WiiM Pro](https://www.wiimhome.com/wiimpro/overview) streamer. Used by part 5.
+- **A Denon AV receiver** (optional) controllable by Home Assistant's [Denon AVR integration](https://www.home-assistant.io/integrations/denonavr/), for the volume and tone controls. Mine is an AVR-X2000. Used by part 6. **Without one, the dial still works:** browse, play and every screen, with the volume and tone controls changing nothing until you add an amp.
 - **Smart plugs for the amps** (optional). Mine are Tasmota relays. Used by part 6 to power the amps on and off.
 - **A 3D printer** (optional). Used by part 2.
 
@@ -129,10 +129,10 @@ demo/                  the browser demo, as published
 
 Everything specific to my house is in two places:
 
-- **`config/secrets.local`** (yours, never committed): Wi-Fi, tokens, the Home Assistant, Music Assistant and Denon addresses, and the Music Assistant player id.
+- **`config/secrets.local`** (yours, never committed): Wi-Fi, tokens, the Home Assistant, Music Assistant and Denon addresses (leave the Denon blank if you have none), the Music Assistant player id, and the room the dial is in.
 - **`home-assistant/`**: the entity ids of the Denon, the streamer and the smart plugs. Search the folder for `CHANGE`.
 
-The helper names (`input_number.bathroom_amp_volume` and the rest) are what the firmware looks for. Keep them as they are, or change them in both `home-assistant/helpers.yaml` and `firmware/main/ha.c`.
+The helpers and sensors are named from the room you set as `DIAL_ROOM`: `kitchen` gives `input_number.kitchen_amp_volume`. The files in `home-assistant/` use `your_room`. Keep that, or change it in those files to match.
 
 ---
 

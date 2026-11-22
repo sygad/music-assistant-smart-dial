@@ -34,6 +34,13 @@ static const char *TAG = "amp";
  * fault. Two in a row is the amp. */
 #define AMP_MISSES_BEFORE_LOST 2
 
+/* No amp at all: AMP_SERVER left blank in config/secrets.local. A dial built
+ * with only Music Assistant behind it is told the amp is there and listening,
+ * for good, so play, the volume arc and the tone screen all behave as they do
+ * with an amp. The volume still goes where it always goes; with no amp behind
+ * it, nothing is made louder (Darren, 22 Nov 2026: "fake amp it is then"). */
+#define AMP_NONE (SECRET_AMP_SERVER[0] == '\0')
+
 static _Atomic int s_state = AMP_UNKNOWN;
 /* Awake at boot: the screen comes on with the dial and set_asleep keeps this
  * in step from then on, but it is never called for the screen already being
@@ -44,8 +51,8 @@ static _Atomic bool s_awake = true;
 static _Atomic int64_t s_waiting_since;
 static TaskHandle_t s_task;
 
-amp_state_t amp_get_state(void) { return (amp_state_t)atomic_load(&s_state); }
-bool amp_ready(void) { return atomic_load(&s_state) == AMP_READY; }
+amp_state_t amp_get_state(void) { return AMP_NONE ? AMP_READY : (amp_state_t)atomic_load(&s_state); }
+bool amp_ready(void) { return amp_get_state() == AMP_READY; }
 
 int amp_connecting_secs(void)
 {
@@ -56,6 +63,7 @@ int amp_connecting_secs(void)
 
 void amp_awake(bool awake)
 {
+    if (AMP_NONE) return;  /* nothing to ask, so nothing to forget */
     if (atomic_exchange(&s_awake, awake) == awake) return;
     if (!awake) {
         /* Asleep: forget what was known. The amp is usually powered down with
@@ -133,6 +141,10 @@ static void amp_task(void *arg)
 void amp_start(void)
 {
     if (s_task) return;
+    if (AMP_NONE) {
+        ESP_LOGI(TAG, "no amp address set: the amp is taken as always there");
+        return;
+    }
     /* Low priority and a PSRAM stack: nothing waits on this, and the answer is
      * only ever read, never blocked on. */
     xTaskCreatePinnedToCoreWithCaps(amp_task, "amp", 4096, NULL, 2, &s_task, 0, MALLOC_CAP_SPIRAM);

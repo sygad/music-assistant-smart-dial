@@ -6,7 +6,7 @@ This repo is written so an AI assistant can build your own dial from it. It does
 
 **What happens:**
 
-1. **Questions first.** The AI asks what you have: the amp, the streamer, the smart plugs, Music Assistant. Nothing changes yet.
+1. **Questions first.** The AI asks what you have: Music Assistant, and whether there's an amp, a streamer and smart plugs. Nothing changes yet. **You don't need any of my equipment.** With just the dial and Music Assistant, you get the whole dial on screen: browse, play, the volume arc and the tone controls. With no amp behind it, the volume and tone change nothing yet. Add an amp later and they start working.
 2. **A plan.** It shows you what it will add to Home Assistant and what it will build, and waits for your yes.
 3. **It builds and checks.** Helpers, scripts and automations in Home Assistant, then the firmware on the dial, then a check that each part works. If you don't have something (no smart plugs, no Whisper), that part is left out rather than faked.
 
@@ -38,7 +38,7 @@ Don't install, create or change anything until I've approved your plan.
 
 - `README.md`: the overview and the parts list.
 - `parts/NN-*/README.md`: one page per part. Read the page for a part before building it.
-- `home-assistant/helpers.yaml`: the seven helpers. **The firmware uses these exact entity ids** (`firmware/main/ha.c`).
+- `home-assistant/helpers.yaml`: the seven helpers. The firmware names every helper and sensor from `DIAL_ROOM` in `config/secrets.local`: `your_room` gives `input_number.your_room_amp_volume`. Every file in `home-assistant/` is written for `your_room`. If the user picks another room name, change `your_room_` to theirs in every file you copy, and use the same name for `DIAL_ROOM`.
 - `home-assistant/blueprints/denon_avr_audio_control.yaml`: a script blueprint.
 - `home-assistant/scripts/*.yaml`, `home-assistant/automations/*.yaml`: the Home Assistant side. Each has a header saying what it is, and `# CHANGE:` on every value that is specific to my house.
 - `config/secrets.example`: every setting the firmware needs. The user copies it to `config/secrets.local`.
@@ -57,25 +57,30 @@ Don't install, create or change anything until I've approved your plan.
 
 ### Step 1: Ask the user
 
-1. Which amplifier? This build drives a Denon (or Marantz) AV receiver through Home Assistant's Denon AVR integration. Another amp means rewriting part 6, so say so.
-2. Which streamer does Music Assistant play to, and is it wired into the amp?
-3. Are the amp and the streamer powered through smart plugs Home Assistant can switch? Which?
-4. Is Music Assistant installed, and which player should the dial play to?
-5. Do they want voice search? It needs the Whisper add-on.
-6. Do they want the music to turn itself off when the room is empty? Which area has occupancy sensors?
-7. Can Home Assistant's `config` share be mounted on this computer (for updates over Wi-Fi)?
-8. Will they print the wall mount?
+1. Is Music Assistant installed, and which player should the dial play to?
+2. What room is the dial for? This becomes `DIAL_ROOM`, lower case with `_` for spaces.
+3. Is there an amplifier, and which? Part 6 drives a Denon or Marantz AV receiver through Home Assistant's Denon AVR integration. **"No amp" is a full answer:** leave `AMP_SERVER` blank, and the dial treats the amp as always connected. Every screen works, and the volume and tone controls change nothing. Build that, and skip the amp questions below. Another make of amp means rewriting part 6, so say so and offer the no-amp build as a first step.
+4. If there's an amp: which streamer does Music Assistant play to, and is it wired into the amp?
+5. If there's an amp: are the amp and the streamer powered through smart plugs Home Assistant can switch? Which?
+6. Do they want voice search? It needs the Whisper add-on.
+7. Do they want the music to turn itself off when the room is empty? Which area has occupancy sensors?
+8. Can Home Assistant's `config` share be mounted on this computer (for updates over Wi-Fi)?
+9. Will they print the wall mount?
+
+### With no amp
+
+Make the helpers (Step 4, item 1) and build the firmware (Step 5) with `AMP_SERVER` blank. Leave out the blueprint, the scripts and every automation except `music-auto-off` if they want it: all of them exist to drive the amp. Music off then turns the music helper off but doesn't stop Music Assistant playing, because stopping the stream is in `music-on-off`, which also powers the amps down. Tell the user that, and that the rest of part 6 can be added once they have an amp.
 
 ### Step 2: Map their things to the roles
 
-- **The Denon:** a `media_player` from the `denonavr` integration. Replaces `media_player.bathroom_denon_amp`.
-- **The streamer:** a `media_player` from its own integration. Replaces `media_player.bathroom_streamer`.
-- **The streamer in Music Assistant:** a `media_player` from `music_assistant`. Replaces `media_player.bathroom_streamer_ma`. Its player id goes in `MA_PLAYER`.
+- **The Denon:** a `media_player` from the `denonavr` integration. Replaces `media_player.your_room_denon_amp`.
+- **The streamer:** a `media_player` from its own integration. Replaces `media_player.your_room_streamer`.
+- **The streamer in Music Assistant:** a `media_player` from `music_assistant`. Replaces `media_player.your_room_streamer_ma`. Its player id goes in `MA_PLAYER`.
 - **The amp's smart plug:** a `switch`. Replaces `switch.attic_storage_swb1_denon_amp`. Optional: without it, delete the power steps in `music-on-off`, and replace the timeout template in `music-amp-ready` (it reads this switch's `last_changed`) with a fixed `150`.
 - **A second plug** (my sub amp's power supply): replaces `switch.attic_storage_swb2_bathroom_sub_psu`. Optional.
 - **The Denon integration's config entry id:** replaces the one in `amp-connection-recovery.yaml`.
 - **The area for auto-off:** replaces `bathroom` in `music-auto-off.yaml`. Optional.
-- **The Denon's address:** goes in `AMP_SERVER`.
+- **The Denon's address:** goes in `AMP_SERVER`. Blank if there's no amp.
 
 ### Step 3: Show the plan and wait
 
@@ -85,8 +90,8 @@ List every helper, script and automation you will create, with its entity id, an
 
 1. Add the helpers from `helpers.yaml` with the same entity ids.
 2. Install the blueprint into `blueprints/script/` and reload scripts.
-3. Create the five scripts with these entity ids: `script.bathroom_amp_volume`, `script.bathroom_amp_treble`, `script.bathroom_amp_bass`, `script.bathroom_music_amp_ready`, `script.bathroom_music_fade_off`.
-4. Create the automations. Give `music-on-off.yaml` the entity id `automation.bathroom_music_fade_off`, because `music-auto-off.yaml` triggers it by that name.
+3. Create the five scripts with these entity ids: `script.your_room_amp_volume`, `script.your_room_amp_treble`, `script.your_room_amp_bass`, `script.your_room_music_amp_ready`, `script.your_room_music_fade_off`.
+4. Create the automations. Give `music-on-off.yaml` the entity id `automation.your_room_music_fade_off`, because `music-auto-off.yaml` triggers it by that name.
 5. For voice search: install the Whisper add-on, accept the Wyoming integration, and check that `stt.faster_whisper` exists.
 
 ### Step 5: The firmware
@@ -97,20 +102,22 @@ List every helper, script and automation you will create, with its entity id, an
 
 ### Step 6: Check it works
 
+With no amp: the dial starts, connects, opens the menu, plays an album, and the volume arc moves. Then `sensor.your_room_dial_firmware` appears in Home Assistant. That's the whole check. With an amp:
+
 - The dial starts, shows the logo, then the connecting screen ticks off Wi-Fi, Music Assistant, Home Assistant and the streamer.
-- `sensor.bathroom_dial_firmware` appears in Home Assistant with the version just built.
-- Turning on `input_boolean.bathroom_music` powers the amp, and `sensor.bathroom_dial_amp` goes from `connecting` to `ready`.
-- Moving `input_number.bathroom_amp_volume` moves the Denon's volume.
+- `sensor.your_room_dial_firmware` appears in Home Assistant with the version just built.
+- Turning on `input_boolean.your_room_music` powers the amp, and `sensor.your_room_dial_amp` goes from `connecting` to `ready`.
+- Moving `input_number.your_room_amp_volume` moves the Denon's volume.
 - Playing an album from the dial plays through the amp.
 - Choosing Music off on the dial fades, stops the stream and turns the helper off.
 - If voice search was installed: Search, say an artist, and results appear.
 
 ### Reference: the helpers
 
-- `input_number.bathroom_amp_volume`: 0 to 98, step 1. Required.
-- `input_number.bathroom_amp_treble`: −6 to 6. Required.
-- `input_number.bathroom_amp_bass`: −6 to 6. Required.
-- `input_number.bathroom_amp_subwoofer`: −12 to 12. Required.
-- `input_boolean.bathroom_music`: required.
-- `input_boolean.bathroom_dial_update`: for updates over Wi-Fi.
-- `input_text.bathroom_dial_firmware_url`: for updates over Wi-Fi.
+- `input_number.your_room_amp_volume`: 0 to 98, step 1. Required.
+- `input_number.your_room_amp_treble`: −6 to 6. Required.
+- `input_number.your_room_amp_bass`: −6 to 6. Required.
+- `input_number.your_room_amp_subwoofer`: −12 to 12. Required.
+- `input_boolean.your_room_music`: required.
+- `input_boolean.your_room_dial_update`: for updates over Wi-Fi.
+- `input_text.your_room_dial_firmware_url`: for updates over Wi-Fi.

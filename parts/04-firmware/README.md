@@ -24,20 +24,21 @@ C on Espressif's ESP-IDF, with every screen drawn by LVGL. It talks to Music Ass
 
 - **Music** goes straight to Music Assistant's API: the library, the covers, the queue, play, pause, seek and volume.
 - **The amp** goes through Home Assistant. The dial reads and writes four helpers (volume, treble, bass, subwoofer) and turns one helper on and off for the music. Home Assistant's automations move the Denon.
-- **Is the amp listening?** The dial asks the Denon's own status page directly, read only, and tells Home Assistant through a sensor it posts itself (`sensor.bathroom_dial_amp`). Home Assistant waits on that before it sets the starting volume.
+- **Is the amp listening?** The dial asks the Denon's own status page directly, read only, and tells Home Assistant through a sensor it posts itself (`sensor.your_room_dial_amp`). Home Assistant waits on that before it sets the starting volume.
 - **Reporting back.** The dial posts its own sensors to Home Assistant: firmware version, battery, memory, uptime, update progress and why it last restarted. No integration is needed; they appear when the dial first posts them.
 
 ## Your settings
 
-Copy `config/secrets.example` to `config/secrets.local` and fill it in. `secrets.local` is git-ignored, and the build stops with a message if a setting is missing.
+Copy `config/secrets.example` to `config/secrets.local` and fill it in. `secrets.local` is git-ignored, and the build stops with a message if a setting is missing. Only `AMP_SERVER` may be left blank.
 
 - `WIFI_SSID`, `WIFI_PASSWORD`: a 2.4 GHz network. The ESP32-S3 has no 5 GHz.
 - `HA_TOKEN`: a Home Assistant long-lived access token (your profile → Security).
 - `MA_TOKEN`: a Music Assistant long-lived token (Settings → Profile).
 - `HA_SERVER`: your Home Assistant, e.g. `http://homeassistant.local:8123`.
 - `MA_SERVER`: your Music Assistant, e.g. `http://homeassistant.local:8095`.
-- `AMP_SERVER`: your Denon's address, e.g. `http://192.168.1.50`.
+- `AMP_SERVER`: your Denon's address, e.g. `http://192.168.1.50`. **Leave it blank if you have no amp.** The dial then treats the amp as always connected: every screen works, and the volume and tone controls change nothing.
 - `MA_PLAYER`: the id of the Music Assistant player the dial plays to.
+- `DIAL_ROOM`: the room the dial is in, lower case with `_` for spaces. Every helper and sensor the dial uses is named from it: `kitchen` gives `input_number.kitchen_amp_volume` and `sensor.kitchen_dial_battery`. The files in `home-assistant/` are written for `your_room`, which is the example's value.
 
 The tokens are compiled into the firmware, so treat a built `.bin` like the tokens themselves.
 
@@ -64,7 +65,7 @@ Once the dial is on the wall, it doesn't need the cable again.
    tools/fw.sh ota
    ```
 
-It builds, copies the firmware into `www`, puts its address in `input_text.bathroom_dial_firmware_url`, and turns on `input_boolean.bathroom_dial_update`. The dial checks those every 10 seconds while its screen is on (every minute while it sleeps), downloads the file into its spare slot and restarts into it. If the new build can't get back online, the dial goes back to the old one by itself.
+It builds, copies the firmware into `www`, puts its address in `input_text.your_room_dial_firmware_url`, and turns on `input_boolean.your_room_dial_update`. The dial checks those every 10 seconds while its screen is on (every minute while it sleeps), downloads the file into its spare slot and restarts into it. If the new build can't get back online, the dial goes back to the old one by itself.
 
 The file has to be served from Home Assistant because the dial's network can't reach back to the computer that built it, in my house. If yours can, the URL can point anywhere.
 

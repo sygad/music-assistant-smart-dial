@@ -7,20 +7,20 @@ description: 'Holds the bathroom streamer at full so the Denon is the only volum
   one, because a phone on Bluetooth is not playing through Music Assistant at all. Daniel''s Amp is deliberately not included: it is a WiiM Amp with no separate amplifier after it, so its own volume IS the volume there.'
 triggers:
 - trigger: state
-  entity_id: media_player.bathroom_streamer  # CHANGE: your streamer, from its own integration
+  entity_id: media_player.your_room_streamer  # CHANGE: your streamer, from its own integration
   attribute: volume_level
   for: 00:00:05
 - trigger: homeassistant
   event: start
 conditions:
 - condition: numeric_state
-  entity_id: media_player.bathroom_streamer  # CHANGE: your streamer, from its own integration
+  entity_id: media_player.your_room_streamer  # CHANGE: your streamer, from its own integration
   attribute: volume_level
   below: 1
 actions:
 - action: media_player.volume_set
   target:
-    entity_id: media_player.bathroom_streamer  # CHANGE: your streamer, from its own integration
+    entity_id: media_player.your_room_streamer  # CHANGE: your streamer, from its own integration
   data:
     volume_level: 1
 mode: single
