@@ -6,7 +6,8 @@
 
 #include "cJSON.h"
 #include "esp_http_client.h"
-#include "secrets_gen.h"  /* MA_PLAYER below; the addresses too */
+#include "secrets_gen.h"  /* the addresses */
+#include "where.h"        /* MA_PLAYER below */
 
 typedef struct {
     esp_http_client_handle_t http;
@@ -21,7 +22,9 @@ typedef struct {
  * player is available before it says the dial is connected (16 Nov 2026), and
  * two copies of a player id that must agree is exactly the half-fix that costs
  * an afternoon - so there is one copy and both files read it. */
-#define MA_PLAYER SECRET_MA_PLAYER  /* config/secrets.local */
+/* Since 22 Nov 2026 it can come from Home Assistant as well as from
+ * config/secrets.local, so it is read at run time (where.h). */
+#define MA_PLAYER where_player()
 
 void ma_init(void);                          /* once: cJSON allocates from PSRAM */
 ma_conn_t *ma_open(size_t max_response);     /* one per task; keeps the connection open */

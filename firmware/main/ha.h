@@ -40,6 +40,10 @@ void ha_set_number(ha_number_t which, int value);
  * the amp already is. */
 bool ha_read_number(ha_number_t which, int *value);
 
+/* Any helper's state as text, e.g. an input_text. Blocking. False if Home
+ * Assistant didn't answer or has no such entity. */
+bool ha_read_text(const char *entity_id, char *out, int out_max);
+
 /* ---- Following the volume (2 Nov 2026) ----------------------------------------
  * The volume helper is read back as well as written, because the knob is not
  * the only thing that moves it: the bathroom dashboard has a slider, the Denon

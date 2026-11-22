@@ -103,12 +103,12 @@ demo/                  the browser demo, as published
 
 ### Adding a streamer or an amp later
 
-Nothing you set up first is thrown away. The helpers stay, the room name stays, and the dial keeps its settings file. Each new piece is one line in that file and one rebuild:
+No cable, no computer and no rebuild. Nothing on the dial to press either: you do it in Home Assistant, and the dial picks it up by itself.
 
-1. **A streamer:** add it to Music Assistant, put its player id in `MA_PLAYER` in `config/secrets.local`, and update the dial. Music now plays. → [Part 5](parts/05-music-assistant/README.md)
-2. **An amp:** put its address in `AMP_SERVER`, add the scripts and automations from part 6 to Home Assistant, and update the dial. The volume and tone controls now drive it. → [Part 6](parts/06-home-assistant/README.md)
+1. **A streamer:** add it to Music Assistant. Then in Home Assistant, open the helper **Dial Player** and type in the streamer's Music Assistant player id. Music now plays. → [Part 5](parts/05-music-assistant/README.md)
+2. **An amp:** add it to Home Assistant with the Denon AVR integration, add the scripts and automations from part 6, then type the amp's address (for example `http://192.168.1.50`) into the helper **Dial Amp Address**. The volume and tone controls now drive it. → [Part 6](parts/06-home-assistant/README.md)
 
-The settings are built into the firmware, so changing them always means updating the dial: `tools/fw.sh flash` with it on its USB cable, or `tools/fw.sh ota` over Wi-Fi once it's on the wall ([part 4](parts/04-firmware/README.md#updates-over-wi-fi)). With an AI, say "I've got a streamer now" or "I've got an amp now" and point it at [BUILD-WITH-AI.md](BUILD-WITH-AI.md).
+Within a minute of either box changing, while its screen is on, the dial restarts itself and uses the new value. With an AI, say "I've got a streamer now" or "I've got an amp now" and point it at [BUILD-WITH-AI.md](BUILD-WITH-AI.md): it can fill both boxes in for you, and add the amp's scripts and automations.
 
 ### Hardware
 

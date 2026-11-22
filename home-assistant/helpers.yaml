@@ -44,3 +44,18 @@ input_text:
     min: 0
     max: 255
     mode: text
+  # Where the amp and the streamer are. The dial reads these when it starts,
+  # and restarts itself within a minute of either changing while it's awake.
+  # Empty means use AMP_SERVER and MA_PLAYER from config/secrets.local.
+  your_room_dial_amp_address:
+    name: Dial Amp Address
+    icon: mdi:amplifier
+    min: 0
+    max: 100
+    mode: text
+  your_room_dial_player:
+    name: Dial Player
+    icon: mdi:speaker-wireless
+    min: 0
+    max: 100
+    mode: text

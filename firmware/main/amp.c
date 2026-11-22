@@ -2,6 +2,7 @@
 #include "amp.h"
 
 #include <stdatomic.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "esp_heap_caps.h"
@@ -10,7 +11,7 @@
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "secrets_gen.h"
+#include "where.h"
 
 static const char *TAG = "amp";
 
@@ -18,7 +19,7 @@ static const char *TAG = "amp";
  * and the cheapest thing it serves: a few hundred bytes, answered in 13-17 ms
  * by a well amp. The address is the Denon's, fixed in the house as Home
  * Assistant's is. */
-#define AMP_STATUS_URL SECRET_AMP_SERVER "/goform/formMainZone_MainZoneXmlStatusLite.xml"
+#define AMP_STATUS_PATH "/goform/formMainZone_MainZoneXmlStatusLite.xml"
 
 /* Short, because a deaf amp does not refuse the connection - it accepts
  * nothing and leaves you waiting. Four seconds is long enough for a well amp
@@ -34,12 +35,13 @@ static const char *TAG = "amp";
  * fault. Two in a row is the amp. */
 #define AMP_MISSES_BEFORE_LOST 2
 
-/* No amp at all: AMP_SERVER left blank in config/secrets.local. A dial built
+/* No amp at all: no address in Home Assistant's amp helper or in AMP_SERVER
+ * (where.h). A dial built
  * with only Music Assistant behind it is told the amp is there and listening,
  * for good, so play, the volume arc and the tone screen all behave as they do
  * with an amp. The volume still goes where it always goes; with no amp behind
  * it, nothing is made louder (Darren, 22 Nov 2026: "fake amp it is then"). */
-#define AMP_NONE (SECRET_AMP_SERVER[0] == '\0')
+#define AMP_NONE (where_amp()[0] == '\0')
 
 static _Atomic int s_state = AMP_UNKNOWN;
 /* Awake at boot: the screen comes on with the dial and set_asleep keeps this
@@ -78,8 +80,10 @@ void amp_awake(bool awake)
 /* One question, one answer. True only if the amp served the page. */
 static bool amp_answers(void)
 {
+    char url[160];
+    snprintf(url, sizeof url, "%s" AMP_STATUS_PATH, where_amp());
     esp_http_client_config_t cfg = {
-        .url = AMP_STATUS_URL,
+        .url = url,
         .method = HTTP_METHOD_GET,
         .timeout_ms = AMP_TIMEOUT_MS,
     };

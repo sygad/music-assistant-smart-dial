@@ -1,5 +1,5 @@
 idf_component_register(
-    SRCS "app_main.c" "net_check.c" "screenshot.c" "library.c" "ma.c" "ha.c" "amp.c" "ota.c" "playback.c" "voice.c" "crash.c" "memwatch.c"
+    SRCS "app_main.c" "net_check.c" "screenshot.c" "library.c" "ma.c" "ha.c" "amp.c" "ota.c" "playback.c" "voice.c" "crash.c" "memwatch.c" "where.c"
     INCLUDE_DIRS "."
     REQUIRES ui board core json nvs_flash esp_wifi esp_netif esp_event esp_http_client mbedtls esp_driver_usb_serial_jtag esp_driver_i2s esp_app_format app_update esp_timer)
 

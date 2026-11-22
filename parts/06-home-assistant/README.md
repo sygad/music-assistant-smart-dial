@@ -8,7 +8,7 @@
 
 Home Assistant does the two things the dial can't do on its own: it switches the amps on and off, and it carries volume, treble, bass and subwoofer to the Denon.
 
-**No amp? Make only the helpers.** The dial needs the seven helpers whatever you have. The blueprint, the scripts and the automations exist to drive a Denon, so leave them out and leave `AMP_SERVER` blank ([part 4](../04-firmware/README.md#your-settings)). The dial then works on every screen, and the volume and tone controls change nothing until you add an amp. Music off won't stop the stream either, because that's done by `music-on-off`.
+**No amp? Make only the helpers.** The dial needs the nine helpers whatever you have. The blueprint, the scripts and the automations exist to drive a Denon, so leave them out and leave `AMP_SERVER` blank ([part 4](../04-firmware/README.md#your-settings)). The dial then works on every screen, and the volume and tone controls change nothing until you add an amp. Music off won't stop the stream either, because that's done by `music-on-off`.
 
 **The names.** Every entity id here starts with the room the dial is in, set as `DIAL_ROOM`. The files use `your_room`, so `input_number.your_room_amp_volume`. Keep it, or change `your_room_` throughout to your own room.
 
@@ -17,7 +17,7 @@ Home Assistant does the two things the dial can't do on its own: it switches the
 - **Tested with:** Home Assistant 2026.11.2
 - **Integrations:** [Denon AVR](https://www.home-assistant.io/integrations/denonavr/) (the amp), [Music Assistant](https://www.home-assistant.io/integrations/music_assistant/) (to stop the stream), your streamer's own integration (mine is [WiiM](https://www.home-assistant.io/integrations/wiim/)), and whatever runs your smart plugs (mine are Tasmota)
 - **Files in `home-assistant/`:**
-  - `helpers.yaml`: the seven helpers the dial reads and writes
+  - `helpers.yaml`: the nine helpers the dial reads and writes
   - `blueprints/denon_avr_audio_control.yaml`: a script blueprint that sends one level to the Denon
   - `scripts/`: five scripts
   - `automations/`: ten automations
@@ -40,6 +40,7 @@ The dial never talks to the Denon's controls itself. It writes a helper, and an 
 - `input_number.your_room_amp_subwoofer`: −12 to +12 dB
 - `input_boolean.your_room_music`: the music on or off
 - `input_boolean.your_room_dial_update`, `input_text.your_room_dial_firmware_url`: updates over Wi-Fi ([part 4](../04-firmware/README.md#updates-over-wi-fi))
+- `input_text.your_room_dial_amp_address`, `input_text.your_room_dial_player`: where the amp and the streamer are. Fill them in when you get one, and the dial restarts itself within a minute to use it. Empty means the values in `config/secrets.local`.
 
 **The scripts:**
 

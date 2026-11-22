@@ -38,7 +38,7 @@ Don't install, create or change anything until I've approved your plan.
 
 - `README.md`: the overview and the parts list.
 - `parts/NN-*/README.md`: one page per part. Read the page for a part before building it.
-- `home-assistant/helpers.yaml`: the seven helpers. The firmware names every helper and sensor from `DIAL_ROOM` in `config/secrets.local`: `your_room` gives `input_number.your_room_amp_volume`. Every file in `home-assistant/` is written for `your_room`. If the user picks another room name, change `your_room_` to theirs in every file you copy, and use the same name for `DIAL_ROOM`.
+- `home-assistant/helpers.yaml`: the nine helpers. The firmware names every helper and sensor from `DIAL_ROOM` in `config/secrets.local`: `your_room` gives `input_number.your_room_amp_volume`. Every file in `home-assistant/` is written for `your_room`. If the user picks another room name, change `your_room_` to theirs in every file you copy, and use the same name for `DIAL_ROOM`.
 - `home-assistant/blueprints/denon_avr_audio_control.yaml`: a script blueprint.
 - `home-assistant/scripts/*.yaml`, `home-assistant/automations/*.yaml`: the Home Assistant side. Each has a header saying what it is, and `# CHANGE:` on every value that is specific to my house.
 - `config/secrets.example`: every setting the firmware needs. The user copies it to `config/secrets.local`.
@@ -73,13 +73,15 @@ Make the helpers (Step 4, item 1) and build the firmware (Step 5) with `AMP_SERV
 
 ### Coming back later with a streamer or an amp
 
-The user built the no-streamer or no-amp version and now has the piece that was missing. Don't start again. Their helpers, `DIAL_ROOM` and `config/secrets.local` stay as they are.
+The user built the no-streamer or no-amp version and now has the piece that was missing. Don't start again, and don't rebuild the firmware: the dial reads where its amp and streamer are from two Home Assistant helpers, and restarts itself within a minute of either changing while its screen is on.
 
 1. Ask what's new: a streamer, an amp, or both. Ask the questions in Step 1 for that piece only.
-2. **A streamer:** check it's a player in Music Assistant, and ask the user to put its player id in `MA_PLAYER`.
-3. **An amp:** map it as in Step 2, show the plan (Step 3), then add the blueprint, scripts and automations (Step 4, items 2 to 4). The helpers are already there. Ask the user to put the amp's address in `AMP_SERVER`.
-4. Rebuild and update the dial: `tools/fw.sh flash` if it's on USB, or `tools/fw.sh ota` if it's on the wall and updates over Wi-Fi are set up.
+2. **A streamer:** check it's a player in Music Assistant, then set `input_text.<room>_dial_player` to its player id.
+3. **An amp:** map it as in Step 2, show the plan (Step 3), then add the blueprint, scripts and automations (Step 4, items 2 to 4). The other helpers are already there. Then set `input_text.<room>_dial_amp_address` to the amp's address, such as `http://192.168.1.50`.
+4. Ask the user to wake the dial (touch it) and wait a minute. It restarts on its own.
 5. Check the new piece only, from Step 6: an album plays through the streamer, or the volume moves the amp.
+
+If the two helpers are missing (a dial set up before they existed), create them from `helpers.yaml` first.
 
 ### Step 2: Map their things to the roles
 
@@ -131,3 +133,5 @@ With no amp: the dial starts, connects, opens the menu, plays an album (with no 
 - `input_boolean.your_room_music`: required.
 - `input_boolean.your_room_dial_update`: for updates over Wi-Fi.
 - `input_text.your_room_dial_firmware_url`: for updates over Wi-Fi.
+- `input_text.your_room_dial_amp_address`: the amp's address. Empty means `AMP_SERVER`, which may be blank for no amp.
+- `input_text.your_room_dial_player`: the Music Assistant player id. Empty means `MA_PLAYER`, which may be blank for no streamer.

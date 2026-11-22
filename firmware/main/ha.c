@@ -29,6 +29,7 @@
 #include "ota.h"
 #include "secrets_gen.h"
 #include "ui.h"
+#include "where.h"
 
 static const char *TAG = "ha";
 
@@ -236,6 +237,11 @@ static bool read_state(const char *entity_id, char *out, int out_max)
     esp_http_client_cleanup(c);
     if (!ok) ESP_LOGW(TAG, "read %s failed", entity_id);
     return ok;
+}
+
+bool ha_read_text(const char *entity_id, char *out, int out_max)
+{
+    return read_state(entity_id, out, out_max);
 }
 
 /* Tell Home Assistant something about the knob, as a sensor of its own, so
@@ -724,6 +730,9 @@ static void update_task(void *arg)
         } else {
             check_update();
             check_music();
+            /* Has the amp or the streamer been set in Home Assistant since
+             * the dial started? Only while it is awake (where.h). */
+            if (atomic_load(&s_volume_follow)) where_check();
             /* One call per sensor, each with its own clock inside it: none of
              * them can silence another (see "one sensor, one function"). */
             say_update();

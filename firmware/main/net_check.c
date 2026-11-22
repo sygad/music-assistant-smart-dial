@@ -20,6 +20,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/event_groups.h"
 #include "freertos/task.h"
+#include "where.h"
 #include "ma.h"
 #include "net_check.h"
 #include "secrets_gen.h"
@@ -271,6 +272,10 @@ static void net_task(void *arg)
         /* And the speaker, which is the stage that was missing: Wi-Fi, Music
          * Assistant and Home Assistant were all fine on 16 Nov 2026 while the
          * streamer was off the network, and the dial said Connected. */
+        /* Where the amp and the streamer are, before anything asks after
+         * either: Home Assistant has just answered, so this is the first
+         * moment its helpers can be read (where.h). */
+        where_load();
         atomic_store(&s_state, NET_SPEAKER);
         atomic_store(&s_speaker, speaker_ok() ? 1 : 0);
         if (clock_from_http_date(false)) {
