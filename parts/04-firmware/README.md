@@ -23,8 +23,8 @@ C on Espressif's ESP-IDF, with every screen drawn by LVGL. It talks to Music Ass
 ## How it works
 
 - **Music** goes straight to Music Assistant's API: the library, the covers, the queue, play, pause, seek and volume.
-- **The amp** goes through Home Assistant. The dial reads and writes four helpers (volume, treble, bass, subwoofer) and turns one helper on and off for the music. Home Assistant's automations move the Denon.
-- **Is the amp listening?** The dial asks the Denon's own status page directly, read only, and tells Home Assistant through a sensor it posts itself (`sensor.your_room_dial_amp`). Home Assistant waits on that before it sets the starting volume.
+- **The amp** goes through Home Assistant. The dial reads and writes four helpers (volume, treble, bass, subwoofer) and turns one helper on and off for the music. Home Assistant's automations move the amp, so the firmware doesn't care what make it is.
+- **Is the amp listening?** The dial asks a Denon or Marantz amp's own status page directly, read only, and tells Home Assistant through a sensor it posts itself (`sensor.your_room_dial_amp`). Home Assistant waits on that before it sets the starting volume.
 - **Reporting back.** The dial posts its own sensors to Home Assistant: firmware version, battery, memory, uptime, update progress and why it last restarted. No integration is needed; they appear when the dial first posts them.
 
 ## Your settings
@@ -36,7 +36,7 @@ Copy `config/secrets.example` to `config/secrets.local` and fill it in. `secrets
 - `MA_TOKEN`: a Music Assistant long-lived token (Settings → Profile).
 - `HA_SERVER`: your Home Assistant, e.g. `http://homeassistant.local:8123`.
 - `MA_SERVER`: your Music Assistant, e.g. `http://homeassistant.local:8095`.
-- `AMP_SERVER`: your Denon's address, e.g. `http://192.168.1.50`. **Leave it blank if you have no amp.** The dial then treats the amp as always connected: every screen works, and the volume and tone controls change nothing. Got one later? Type its address into Home Assistant's `input_text.<room>_dial_amp_address` instead: no rebuild ([part 6](../06-home-assistant/README.md)).
+- `AMP_SERVER`: your Denon or Marantz's address, e.g. `http://192.168.1.50`. **Leave it blank if you have no amp, or another make of amp** (the check above only works on a Denon or Marantz). The dial then treats the amp as always connected: every screen works, and the volume and tone controls change nothing. Got one later? Type its address into Home Assistant's `input_text.<room>_dial_amp_address` instead: no rebuild ([part 6](../06-home-assistant/README.md)).
 - `MA_PLAYER`: the id of the Music Assistant player the dial plays to. **Leave it blank if you have no streamer:** the dial browses as usual, and nothing plays. Got one later? Type its name, as Music Assistant shows it, into `input_text.<room>_dial_player` instead: no rebuild.
 - `DIAL_ROOM`: the room the dial is in, lower case with `_` for spaces. Every helper and sensor the dial uses is named from it: `kitchen` gives `input_number.kitchen_amp_volume` and `sensor.kitchen_dial_battery`. The files in `home-assistant/` are written for `your_room`, which is the example's value.
 

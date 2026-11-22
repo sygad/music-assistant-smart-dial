@@ -58,7 +58,7 @@ demo/                  the browser demo, as published
 3. **[The screens and the design system](parts/03-screens/README.md)**: every screen the dial draws, designed in Figma first, with one token per job.
 4. **[The firmware](parts/04-firmware/README.md)**: C on ESP-IDF, drawn with LVGL. Builds with one command, updates itself over Wi-Fi.
 5. **[Music Assistant](parts/05-music-assistant/README.md)**: the library, the covers and the playing. The dial talks to it directly.
-6. **[Home Assistant](parts/06-home-assistant/README.md)**: powers the amps, and turns the dial's volume, bass, treble and subwoofer into Denon commands.
+6. **[Home Assistant](parts/06-home-assistant/README.md)**: powers the amps, and turns the dial's volume, bass, treble and subwoofer into commands for the amp. Mine is a Denon, so the files here are written for one.
 7. **[Voice search](parts/07-voice-search/README.md)**: choose Search and speak. Home Assistant's Whisper add-on turns it into words.
 8. **[The browser demo](parts/08-browser-demo/README.md)**: the same screens compiled for the web, to try ideas without the hardware.
 
@@ -106,7 +106,7 @@ demo/                  the browser demo, as published
 No cable, no computer and no rebuild. Nothing on the dial to press either. You do it in Home Assistant, which already has two empty settings waiting for this, made when the dial was first set up.
 
 1. **A streamer:** add it to Music Assistant first. Then in Home Assistant go to **Settings → Devices & services → Helpers**, open **Dial Player**, and type in the streamer's name exactly as Music Assistant shows it, for example `Bathroom Streamer`. Music now plays. → [Part 5](parts/05-music-assistant/README.md)
-2. **An amp:** add it to Home Assistant with the Denon AVR integration, and add the scripts and automations from [part 6](parts/06-home-assistant/README.md). Then in **Settings → Devices & services → Helpers**, open **Dial Amp Address** and type in the amp's network address, for example `192.168.1.50`. Your router's list of connected devices shows the amp's address. The volume and tone controls now drive the amp.
+2. **An amp:** add it to Home Assistant with its own integration, then add the scripts and automations that drive it. [Part 6](parts/06-home-assistant/README.md) has mine, written for a Denon; for another make, they have to be written for your amp, which an AI can do from mine. If it's a Denon or Marantz, also go to **Settings → Devices & services → Helpers**, open **Dial Amp Address** and type in the amp's network address, for example `192.168.1.50`. For any other make, leave that empty. Your router's list of connected devices shows the amp's address. The volume and tone controls now drive the amp.
 
 Within a minute of either setting changing, while its screen is on, the dial restarts itself and uses the new value. With an AI, say "I've got a streamer now" or "I've got an amp now" and point it at [BUILD-WITH-AI.md](BUILD-WITH-AI.md): it can fill both in for you, and add the amp's scripts and automations.
 
@@ -115,7 +115,7 @@ Within a minute of either setting changing, while its screen is on, the dial res
 - **[Waveshare ESP32-S3-Knob-Touch-LCD-1.8](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm)**: the dial. Used by every part.
 - **A USB-C data cable**: for the first flash and for power.
 - **A streamer Music Assistant can play to** (optional, but no music without one). Mine is a [WiiM Pro](https://www.wiimhome.com/wiimpro/overview). Used by part 5.
-- **A Denon AV receiver** (optional) controllable by Home Assistant's [Denon AVR integration](https://www.home-assistant.io/integrations/denonavr/), for the volume and tone controls. Mine is an AVR-X2000. Used by part 6. Without one, the volume and tone controls still move on screen but change nothing.
+- **An amplifier Home Assistant can control** (optional), for the volume and tone controls. Mine is a Denon AVR-X2000, through Home Assistant's [Denon AVR integration](https://www.home-assistant.io/integrations/denonavr/), and part 6 is written for that. Another make works too, but the Home Assistant side has to be written for it ([see below](#another-make-of-amp)). Without an amp, the volume and tone controls still move on screen but change nothing.
 - **Smart plugs for the amps** (optional). Mine are Tasmota relays. Used by part 6 to power the amps on and off.
 - **A 3D printer** (optional). Used by part 2.
 
@@ -144,10 +144,20 @@ Within a minute of either setting changing, while its screen is on, the dial res
 
 Everything specific to my house is in two places:
 
-- **`config/secrets.local`** (yours, never committed): Wi-Fi, tokens, the Home Assistant, Music Assistant and Denon addresses (leave the Denon blank if you have none), the Music Assistant player id (blank if you have no streamer), and the room the dial is in.
-- **`home-assistant/`**: the entity ids of the Denon, the streamer and the smart plugs. Search the folder for `CHANGE`.
+- **`config/secrets.local`** (yours, never committed): Wi-Fi, tokens, the Home Assistant, Music Assistant and amp addresses (leave the amp blank if you have none, or if it isn't a Denon or Marantz), the Music Assistant player id (blank if you have no streamer), and the room the dial is in.
+- **`home-assistant/`**: the entity ids of the amp, the streamer and the smart plugs. Search the folder for `CHANGE`.
 
 The helpers and sensors are named from the room you set as `DIAL_ROOM`: `kitchen` gives `input_number.kitchen_amp_volume`. The files in `home-assistant/` use `your_room`. Keep that, or change it in those files to match.
+
+---
+
+### Another make of amp
+
+The dial doesn't know what make your amp is. It never sends the amp a command: it writes the volume, bass, treble and subwoofer into Home Assistant helpers, and Home Assistant's automations turn those into commands for the amp. So the dial works with any amp Home Assistant can control, as long as the automations are written for it.
+
+Mine are written for a Denon. With another make, you, or the AI building it for you, have to work out how Home Assistant controls your amp and write its own versions of the scripts and automations in part 6. [BUILD-WITH-AI.md](BUILD-WITH-AI.md) tells the AI to do exactly that. Some amps won't have all four controls; a control your amp doesn't have just does nothing.
+
+One thing in the dial is Denon-only: it checks the amp is listening by reading a status page that only Denon and Marantz amps serve. For any other make, leave **Dial Amp Address** and `AMP_SERVER` empty. The dial then skips that check and sends the volume straight away.
 
 ---
 

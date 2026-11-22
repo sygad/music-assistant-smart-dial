@@ -8,7 +8,9 @@
 
 Home Assistant does the two things the dial can't do on its own: it switches the amps on and off, and it carries volume, treble, bass and subwoofer to the Denon.
 
-**No amp? Make only the helpers.** The dial needs the nine helpers whatever you have. The blueprint, the scripts and the automations exist to drive a Denon, so leave them out and leave `AMP_SERVER` blank ([part 4](../04-firmware/README.md#your-settings)). The dial then works on every screen, and the volume and tone controls change nothing until you add an amp. Music off won't stop the stream either, because that's done by `music-on-off`.
+**This page is my setup, and my amp is a Denon.** The dial doesn't care what make the amp is: it only writes helpers, and these files turn them into Denon commands. With another make, the scripts and automations have to be written for that amp, which is a job an AI can do from these. See [Another make of amp](../../README.md#another-make-of-amp).
+
+**No amp? Make only the helpers.** The dial needs the nine helpers whatever you have. The blueprint, the scripts and the automations exist to drive the amp, so leave them out and leave `AMP_SERVER` blank ([part 4](../04-firmware/README.md#your-settings)). The dial then works on every screen, and the volume and tone controls change nothing until you add an amp. Music off won't stop the stream either, because that's done by `music-on-off`.
 
 **The names.** Every entity id here starts with the room the dial is in, set as `DIAL_ROOM`. The files use `your_room`, so `input_number.your_room_amp_volume`. Keep it, or change `your_room_` throughout to your own room.
 
@@ -77,7 +79,7 @@ The dial never talks to the Denon's controls itself. It writes a helper, and an 
 3. Copy `home-assistant/blueprints/denon_avr_audio_control.yaml` to `config/blueprints/script/`, and reload scripts.
 4. Make each script in `home-assistant/scripts/` in YAML mode. **Give each the entity id the others call it by:** `script.your_room_amp_volume`, `script.your_room_amp_treble`, `script.your_room_amp_bass`, `script.your_room_music_amp_ready`, `script.your_room_music_fade_off`.
 5. Make each automation in `home-assistant/automations/` in YAML mode. `music-auto-off` triggers `automation.your_room_music_fade_off` by name, so give `music-on-off` that entity id, or change the reference.
-6. Search everything you pasted for `CHANGE` and put in your own Denon, streamer and smart plugs. If you have no smart plugs, delete those steps from `music-on-off` and `music-amp-ready`.
+6. Search everything you pasted for `CHANGE` and put in your own Denon, streamer and smart plugs. Another make of amp needs its own versions of these files, not just new entity ids. If you have no smart plugs, delete those steps from `music-on-off` and `music-amp-ready`.
 
 ---
 

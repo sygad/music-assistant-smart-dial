@@ -59,7 +59,7 @@ Don't install, create or change anything until I've approved your plan.
 
 1. Is Music Assistant installed? Is there a streamer for the dial to play to, and which Music Assistant player is it? **"No streamer" is a full answer:** leave `MA_PLAYER` blank. The dial says "No streamer" when it starts, then browses as usual, and nothing plays. Tell the user they won't hear music.
 2. What room is the dial for? This becomes `DIAL_ROOM`, lower case with `_` for spaces.
-3. Is there an amplifier, and which? Part 6 drives a Denon or Marantz AV receiver through Home Assistant's Denon AVR integration. **"No amp" is a full answer:** leave `AMP_SERVER` blank, and the dial treats the amp as always connected. Every screen works, and the volume and tone controls change nothing. Build that, and skip the amp questions below. Another make of amp means rewriting part 6, so say so and offer the no-amp build as a first step.
+3. Is there an amplifier, and which? Part 6 is written for the author's Denon, through Home Assistant's Denon AVR integration. Any amp Home Assistant can control will do: see "With another make of amp" below. **"No amp" is a full answer:** leave `AMP_SERVER` blank, and the dial treats the amp as always connected. Every screen works, and the volume and tone controls change nothing. Build that, and skip the amp questions below.
 4. If there's an amp: which streamer does Music Assistant play to, and is it wired into the amp?
 5. If there's an amp: are the amp and the streamer powered through smart plugs Home Assistant can switch? Which?
 6. Do they want voice search? It needs the Whisper add-on.
@@ -71,13 +71,23 @@ Don't install, create or change anything until I've approved your plan.
 
 Make the helpers (Step 4, item 1) and build the firmware (Step 5) with `AMP_SERVER` blank. Leave out the blueprint, the scripts and every automation except `music-auto-off` if they want it: all of them exist to drive the amp. Music off then turns the music helper off but doesn't stop Music Assistant playing, because stopping the stream is in `music-on-off`, which also powers the amps down. Tell the user that, and that the rest of part 6 can be added once they have an amp.
 
+### With another make of amp
+
+The dial never talks to the amp's controls. It writes four helpers (volume, treble, bass, subwoofer) and turns `input_boolean.<room>_music` on and off, and Home Assistant's automations do the rest. Part 6's scripts and automations are written for a Denon. For another make, you have to work out how to control this amp from Home Assistant and write its own versions:
+
+1. Find the amp's integration in Home Assistant and what it offers: volume, tone controls, source, power. Read its documentation and the entity's attributes. Tell the user what it can and can't do.
+2. Read each file in `home-assistant/scripts/` and `home-assistant/automations/` for what it does, and write the same behaviour for this amp. The volume helper runs 0 to 98 (a Denon's scale): scale it to the amp's own range in the script, not in the helper.
+3. Leave out what the amp can't do, and tell the user which controls on the dial will then do nothing.
+4. Leave `AMP_SERVER` and `input_text.<room>_dial_amp_address` empty. The dial's check that the amp is listening reads a status page only Denon and Marantz amps serve. Empty, the dial skips it and sends the volume at once. `music-amp-ready` waits on `sensor.<room>_dial_amp`, which then always says `ready`: give it a wait that suits this amp instead.
+5. Show the user the plan (Step 3) before creating anything, and say plainly that these files are new, not copied from a tested setup.
+
 ### Coming back later with a streamer or an amp
 
 The user built the no-streamer or no-amp version and now has the piece that was missing. Don't start again, and don't rebuild the firmware: the dial reads where its amp and streamer are from two Home Assistant helpers, and restarts itself within a minute of either changing while its screen is on.
 
 1. Ask what's new: a streamer, an amp, or both. Ask the questions in Step 1 for that piece only.
 2. **A streamer:** check it's a player in Music Assistant, then set `input_text.<room>_dial_player` to its name as Music Assistant shows it (its player id works too).
-3. **An amp:** map it as in Step 2, show the plan (Step 3), then add the blueprint, scripts and automations (Step 4, items 2 to 4). The other helpers are already there. Then set `input_text.<room>_dial_amp_address` to the amp's address, such as `http://192.168.1.50`.
+3. **An amp:** map it as in Step 2, show the plan (Step 3), then add the blueprint, scripts and automations (Step 4, items 2 to 4), or for another make, write them as in "With another make of amp". The other helpers are already there. For a Denon or Marantz, set `input_text.<room>_dial_amp_address` to the amp's address, such as `192.168.1.50`; for another make, leave it empty.
 4. Ask the user to wake the dial (touch it) and wait a minute. It restarts on its own.
 5. Check the new piece only, from Step 6: an album plays through the streamer, or the volume moves the amp.
 
@@ -92,7 +102,7 @@ If the two helpers are missing (a dial set up before they existed), create them 
 - **A second plug** (my sub amp's power supply): replaces `switch.attic_storage_swb2_bathroom_sub_psu`. Optional.
 - **The Denon integration's config entry id:** replaces the one in `amp-connection-recovery.yaml`.
 - **The area for auto-off:** replaces `bathroom` in `music-auto-off.yaml`. Optional.
-- **The Denon's address:** goes in `AMP_SERVER`. Blank if there's no amp.
+- **The Denon's address:** goes in `AMP_SERVER`. Blank if there's no amp, or it isn't a Denon or Marantz.
 
 ### Step 3: Show the plan and wait
 
@@ -119,7 +129,7 @@ With no amp: the dial starts, connects, opens the menu, plays an album (with no 
 - The dial starts, shows the logo, then the connecting screen ticks off Wi-Fi, Music Assistant, Home Assistant and the streamer.
 - `sensor.your_room_dial_firmware` appears in Home Assistant with the version just built.
 - Turning on `input_boolean.your_room_music` powers the amp, and `sensor.your_room_dial_amp` goes from `connecting` to `ready`.
-- Moving `input_number.your_room_amp_volume` moves the Denon's volume.
+- Moving `input_number.your_room_amp_volume` moves the amp's volume.
 - Playing an album from the dial plays through the amp.
 - Choosing Music off on the dial fades, stops the stream and turns the helper off.
 - If voice search was installed: Search, say an artist, and results appear.
