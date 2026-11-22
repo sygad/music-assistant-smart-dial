@@ -6,7 +6,7 @@ This repo is written so an AI assistant can build your own dial from it. It does
 
 **What happens:**
 
-1. **Questions first.** The AI asks what you have: Music Assistant, and whether there's an amp, a streamer and smart plugs. Nothing changes yet. **You don't need any of my equipment.** With just the dial and Music Assistant, you get the whole dial on screen: browse, play, the volume arc and the tone controls. With no amp behind it, the volume and tone change nothing yet. Add an amp later and they start working.
+1. **Questions first.** The AI asks what you have: Music Assistant, and whether there's an amp, a streamer and smart plugs. Nothing changes yet. **You don't need any of my equipment.** With just the dial, Home Assistant and Music Assistant, you get the whole dial on screen: browse, Now Playing, the volume arc and the tone controls. **You won't hear any music** until there's a streamer to play to, and the volume and tone change nothing until there's an amp. Add them later and they start working.
 2. **A plan.** It shows you what it will add to Home Assistant and what it will build, and waits for your yes.
 3. **It builds and checks.** Helpers, scripts and automations in Home Assistant, then the firmware on the dial, then a check that each part works. If you don't have something (no smart plugs, no Whisper), that part is left out rather than faked.
 
@@ -57,7 +57,7 @@ Don't install, create or change anything until I've approved your plan.
 
 ### Step 1: Ask the user
 
-1. Is Music Assistant installed, and which player should the dial play to?
+1. Is Music Assistant installed? Is there a streamer for the dial to play to, and which Music Assistant player is it? **"No streamer" is a full answer:** leave `MA_PLAYER` blank. The dial says "No streamer" when it starts, then browses as usual, and nothing plays. Tell the user they won't hear music.
 2. What room is the dial for? This becomes `DIAL_ROOM`, lower case with `_` for spaces.
 3. Is there an amplifier, and which? Part 6 drives a Denon or Marantz AV receiver through Home Assistant's Denon AVR integration. **"No amp" is a full answer:** leave `AMP_SERVER` blank, and the dial treats the amp as always connected. Every screen works, and the volume and tone controls change nothing. Build that, and skip the amp questions below. Another make of amp means rewriting part 6, so say so and offer the no-amp build as a first step.
 4. If there's an amp: which streamer does Music Assistant play to, and is it wired into the amp?
@@ -102,7 +102,7 @@ List every helper, script and automation you will create, with its entity id, an
 
 ### Step 6: Check it works
 
-With no amp: the dial starts, connects, opens the menu, plays an album, and the volume arc moves. Then `sensor.your_room_dial_firmware` appears in Home Assistant. That's the whole check. With an amp:
+With no amp: the dial starts, connects, opens the menu, plays an album (with no streamer it says "No streamer" and nothing plays), and the volume arc moves. Then `sensor.your_room_dial_firmware` appears in Home Assistant. That's the whole check. With an amp:
 
 - The dial starts, shows the logo, then the connecting screen ticks off Wi-Fi, Music Assistant, Home Assistant and the streamer.
 - `sensor.your_room_dial_firmware` appears in Home Assistant with the version just built.

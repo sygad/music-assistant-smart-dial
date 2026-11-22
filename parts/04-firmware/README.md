@@ -29,7 +29,7 @@ C on Espressif's ESP-IDF, with every screen drawn by LVGL. It talks to Music Ass
 
 ## Your settings
 
-Copy `config/secrets.example` to `config/secrets.local` and fill it in. `secrets.local` is git-ignored, and the build stops with a message if a setting is missing. Only `AMP_SERVER` may be left blank.
+Copy `config/secrets.example` to `config/secrets.local` and fill it in. `secrets.local` is git-ignored, and the build stops with a message if a setting is missing. Only `AMP_SERVER` and `MA_PLAYER` may be left blank.
 
 - `WIFI_SSID`, `WIFI_PASSWORD`: a 2.4 GHz network. The ESP32-S3 has no 5 GHz.
 - `HA_TOKEN`: a Home Assistant long-lived access token (your profile → Security).
@@ -37,7 +37,7 @@ Copy `config/secrets.example` to `config/secrets.local` and fill it in. `secrets
 - `HA_SERVER`: your Home Assistant, e.g. `http://homeassistant.local:8123`.
 - `MA_SERVER`: your Music Assistant, e.g. `http://homeassistant.local:8095`.
 - `AMP_SERVER`: your Denon's address, e.g. `http://192.168.1.50`. **Leave it blank if you have no amp.** The dial then treats the amp as always connected: every screen works, and the volume and tone controls change nothing.
-- `MA_PLAYER`: the id of the Music Assistant player the dial plays to.
+- `MA_PLAYER`: the id of the Music Assistant player the dial plays to. **Leave it blank if you have no streamer:** the dial browses as usual, and nothing plays.
 - `DIAL_ROOM`: the room the dial is in, lower case with `_` for spaces. Every helper and sensor the dial uses is named from it: `kitchen` gives `input_number.kitchen_amp_volume` and `sensor.kitchen_dial_battery`. The files in `home-assistant/` are written for `your_room`, which is the example's value.
 
 The tokens are compiled into the firmware, so treat a built `.bin` like the tokens themselves.

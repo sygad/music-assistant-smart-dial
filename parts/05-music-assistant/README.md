@@ -13,7 +13,7 @@ The dial talks to [Music Assistant](https://www.music-assistant.io/) directly, n
 - **Built from:** Music Assistant's HTTP API (`POST /api` with a command and its arguments), with a long-lived token
 - **Tested with:** the Music Assistant add-on 2.10.12
 - **Files:** `firmware/main/ma.c` (the connection), `library.c` (albums, playlists, recent, covers), `playback.c` (the queue and the transport)
-- **Plays to:** one player, set as `MA_PLAYER` in `config/secrets.local`. Mine is a WiiM Pro wired into the Denon.
+- **Plays to:** one player, set as `MA_PLAYER` in `config/secrets.local`. Mine is a WiiM Pro wired into the Denon. No streamer yet? Leave it blank: the dial says "No streamer" when it starts, then browses as usual, and nothing plays.
 
 ## How it works
 

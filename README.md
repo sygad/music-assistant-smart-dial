@@ -95,12 +95,18 @@ demo/                  the browser demo, as published
 
 ## What you need
 
+### The least you need to try it
+
+**Just the dial, and Home Assistant with Music Assistant.** You don't need a streamer, an amp or any of my equipment. Leave the streamer and the amp blank in your settings, and the dial starts, says "No streamer", and then works on every screen: browse your albums and playlists, open Now Playing, turn the volume, swipe up for the tone controls.
+
+**You won't hear any music.** With nothing to play to, playing does nothing and the volume and tone controls change nothing. It's a way to get the feel of the dial before you buy anything else. Add a streamer later and the music plays; add an amp and the volume and tone work.
+
 ### Hardware
 
 - **[Waveshare ESP32-S3-Knob-Touch-LCD-1.8](https://www.waveshare.com/esp32-s3-knob-touch-lcd-1.8.htm)**: the dial. Used by every part.
 - **A USB-C data cable**: for the first flash and for power.
-- **Music Assistant with a player to play to.** Mine is a [WiiM Pro](https://www.wiimhome.com/wiimpro/overview) streamer. Used by part 5.
-- **A Denon AV receiver** (optional) controllable by Home Assistant's [Denon AVR integration](https://www.home-assistant.io/integrations/denonavr/), for the volume and tone controls. Mine is an AVR-X2000. Used by part 6. **Without one, the dial still works:** browse, play and every screen, with the volume and tone controls changing nothing until you add an amp.
+- **A streamer Music Assistant can play to** (optional, but no music without one). Mine is a [WiiM Pro](https://www.wiimhome.com/wiimpro/overview). Used by part 5.
+- **A Denon AV receiver** (optional) controllable by Home Assistant's [Denon AVR integration](https://www.home-assistant.io/integrations/denonavr/), for the volume and tone controls. Mine is an AVR-X2000. Used by part 6. Without one, the volume and tone controls still move on screen but change nothing.
 - **Smart plugs for the amps** (optional). Mine are Tasmota relays. Used by part 6 to power the amps on and off.
 - **A 3D printer** (optional). Used by part 2.
 
@@ -129,7 +135,7 @@ demo/                  the browser demo, as published
 
 Everything specific to my house is in two places:
 
-- **`config/secrets.local`** (yours, never committed): Wi-Fi, tokens, the Home Assistant, Music Assistant and Denon addresses (leave the Denon blank if you have none), the Music Assistant player id, and the room the dial is in.
+- **`config/secrets.local`** (yours, never committed): Wi-Fi, tokens, the Home Assistant, Music Assistant and Denon addresses (leave the Denon blank if you have none), the Music Assistant player id (blank if you have no streamer), and the room the dial is in.
 - **`home-assistant/`**: the entity ids of the Denon, the streamer and the smart plugs. Search the folder for `CHANGE`.
 
 The helpers and sensors are named from the room you set as `DIAL_ROOM`: `kitchen` gives `input_number.kitchen_amp_volume`. The files in `home-assistant/` use `your_room`. Keep that, or change it in those files to match.

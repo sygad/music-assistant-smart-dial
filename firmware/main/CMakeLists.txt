@@ -52,7 +52,9 @@ endforeach()
 # The addresses and the player are this house's, so they live beside the
 # tokens rather than in the C: anyone else building it fills in their own.
 # AMP_SERVER may be blank: no amp, and amp.c takes it as always there.
-foreach(v HA_SERVER MA_SERVER MA_PLAYER DIAL_ROOM)
+# MA_PLAYER may be blank: no streamer. The dial says "No streamer" at start-up,
+# then browses as usual, and nothing plays.
+foreach(v HA_SERVER MA_SERVER DIAL_ROOM)
     if("${${v}}" STREQUAL "")
         message(FATAL_ERROR "config/secrets.local has no ${v}= (see config/secrets.example)")
     endif()
