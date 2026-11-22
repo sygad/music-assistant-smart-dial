@@ -103,12 +103,12 @@ demo/                  the browser demo, as published
 
 ### Adding a streamer or an amp later
 
-No cable, no computer and no rebuild. Nothing on the dial to press either: you do it in Home Assistant, and the dial picks it up by itself.
+No cable, no computer and no rebuild. Nothing on the dial to press either. You do it in Home Assistant, which already has two empty settings waiting for this, made when the dial was first set up.
 
-1. **A streamer:** add it to Music Assistant. Then in Home Assistant, open the helper **Dial Player** and type in the streamer's Music Assistant player id. Music now plays. → [Part 5](parts/05-music-assistant/README.md)
-2. **An amp:** add it to Home Assistant with the Denon AVR integration, add the scripts and automations from part 6, then type the amp's address (for example `http://192.168.1.50`) into the helper **Dial Amp Address**. The volume and tone controls now drive it. → [Part 6](parts/06-home-assistant/README.md)
+1. **A streamer:** add it to Music Assistant first. Then in Home Assistant go to **Settings → Devices & services → Helpers**, open **Dial Player**, and type in the streamer's player id from Music Assistant. Music now plays. → [Part 5](parts/05-music-assistant/README.md)
+2. **An amp:** add it to Home Assistant with the Denon AVR integration, and add the scripts and automations from [part 6](parts/06-home-assistant/README.md). Then in **Settings → Devices & services → Helpers**, open **Dial Amp Address** and type in the amp's network address, starting with `http://`, for example `http://192.168.1.50`. Your router's list of connected devices shows the amp's address. The volume and tone controls now drive the amp.
 
-Within a minute of either box changing, while its screen is on, the dial restarts itself and uses the new value. With an AI, say "I've got a streamer now" or "I've got an amp now" and point it at [BUILD-WITH-AI.md](BUILD-WITH-AI.md): it can fill both boxes in for you, and add the amp's scripts and automations.
+Within a minute of either setting changing, while its screen is on, the dial restarts itself and uses the new value. With an AI, say "I've got a streamer now" or "I've got an amp now" and point it at [BUILD-WITH-AI.md](BUILD-WITH-AI.md): it can fill both in for you, and add the amp's scripts and automations.
 
 ### Hardware
 
